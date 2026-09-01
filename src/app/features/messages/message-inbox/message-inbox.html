@@ -1,0 +1,27 @@
+<section class="inbox">
+  <h1>Messaggi</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (conversations().length === 0) {
+    <p class="hint">Nessuna conversazione ancora.</p>
+  } @else {
+    <ul class="conversation-list">
+      @for (conversation of conversations(); track conversation.offerId) {
+        <li>
+          <a class="conversation-row" [routerLink]="['/messages', conversation.offerId]">
+            <div class="conversation-main">
+              <span class="offer-label">Trattativa #{{ conversation.offerId }}</span>
+              <span class="preview">{{ conversation.senderUsername }}: {{ conversation.body }}</span>
+            </div>
+            @if (isUnread(conversation)) {
+              <span class="unread-dot" aria-label="Non letto"></span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>

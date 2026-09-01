@@ -1,0 +1,21 @@
+<section class="reviews-list">
+  <h1>Scambi da recensire</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (completedExchanges().length === 0) {
+    <p class="hint">Nessuno scambio completato al momento.</p>
+  } @else {
+    <ul class="exchange-list">
+      @for (exchange of completedExchanges(); track exchange.id) {
+        <li class="exchange-row">
+          <span class="exchange-label">Scambio #{{ exchange.id }}</span>
+          <span class="exchange-date">completato il {{ exchange.completedAt | date: 'dd/MM/yyyy' }}</span>
+          <a class="review-link" [routerLink]="['/reviews/new', exchange.id]">Lascia una recensione</a>
+        </li>
+      }
+    </ul>
+  }
+</section>
