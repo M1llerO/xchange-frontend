@@ -1,28 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth-guard';
-
-export const routes: Routes = [
-  {
-    path: 'messages',
-    loadComponent: () => import('./features/messages/message-inbox/message-inbox').then((m) => m.MessageInbox),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'messages/:offerId',
-    loadComponent: () => import('./features/messages/message-thread/message-thread').then((m) => m.MessageThread),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'reviews',
-    loadComponent: () => import('./features/reviews/reviews-to-give/reviews-to-give').then((m) => m.ReviewsToGive),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'reviews/new/:exchangeId',
-    loadComponent: () => import('./features/reviews/review-form/review-form').then((m) => m.ReviewForm),
-    canActivate: [authGuard]
-  }
-];
 import { LayoutComponent } from './features/layout/layout.component';
 import { LoginComponent } from './features/auth/login.component';
 import { RegisterComponent } from './features/auth/register.component';
@@ -36,7 +12,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
-      
+
       // Protected routes (require login)
       {
         path: 'dashboard',
@@ -59,7 +35,22 @@ export const routes: Routes = [
       },
       {
         path: 'messages',
-        loadComponent: () => import('./features/messages/messages.component').then(m => m.MessagesComponent),
+        loadComponent: () => import('./features/messages/message-inbox/message-inbox').then(m => m.MessageInbox),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'messages/:offerId',
+        loadComponent: () => import('./features/messages/message-thread/message-thread').then(m => m.MessageThread),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'reviews',
+        loadComponent: () => import('./features/reviews/reviews-to-give/reviews-to-give').then(m => m.ReviewsToGive),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'reviews/new/:exchangeId',
+        loadComponent: () => import('./features/reviews/review-form/review-form').then(m => m.ReviewForm),
         canActivate: [authGuard]
       },
       {
@@ -94,4 +85,3 @@ export const routes: Routes = [
     ]
   }
 ];
-
