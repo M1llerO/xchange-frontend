@@ -26,7 +26,6 @@ export const routes: Routes = [
 import { LayoutComponent } from './features/layout/layout.component';
 import { LoginComponent } from './features/auth/login.component';
 import { RegisterComponent } from './features/auth/register.component';
-import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role-guard';
 
 export const routes: Routes = [

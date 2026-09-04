@@ -25,6 +25,14 @@ export class OfferService {
     return this.http.patch<OfferDto>(`${this.baseUrl}/offers/${offerId}/approve`, {});
   }
 
+  reject(offerId: number) {
+  return this.http.patch<OfferDto>(`${this.baseUrl}/offers/${offerId}/reject`, {});
+}
+
+  cancel(offerId: number) {
+    return this.http.patch<OfferDto>(`${this.baseUrl}/offers/${offerId}/cancel`, {});
+  }
+
   counter(offerId: number, data: CounterOfferRequest) {
     return this.http.post<OfferDto>(`${this.baseUrl}/offers/${offerId}/counter`, data);
   }
