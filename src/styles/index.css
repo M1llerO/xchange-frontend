@@ -1,0 +1,21 @@
+/* ========================================
+   MAIN STYLES INDEX
+   Imports all CSS files in the correct order
+   ======================================== */
+
+/* Global Styles - Order matters! */
+@import './global/variables.css';
+@import './global/base.css';
+
+/* Reusable Component Styles */
+@import './components/buttons.css';
+@import './components/forms.css';
+@import './components/cards.css';
+
+/* Page & Layout Specific Styles */
+@import './pages/auth.css';
+@import './pages/layout.css';
+@import './pages/dashboard.css';
+
+/* Utilities - Last to have highest specificity */
+@import './global/utilities.css';

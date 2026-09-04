@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="admin-header">
+    <div class="header-row">
+      <div>
+        <h1>Gestione Categorie</h1>
+        <p>Crea, modifica e gestisci le categorie di scambio</p>
+      </div>
+      <button class="btn btn-primary" (click)="openNewForm()" *ngIf="!showForm()">
+        ➕ Nuova Categoria
+      </button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+    <!-- Categories List -->
+    <div class="categories-list" *ngIf="!showForm()">
+      <div *ngIf="loading()" class="loading">Caricamento...</div>
+
+      <div *ngIf="!loading() && categories().length === 0" class="empty-state">
+        <p>Nessuna categoria trovata. <a href="javascript:void(0)" (click)="openNewForm()">Creane una nuova</a></p>
+      </div>
+
+      <div *ngIf="!loading() && categories().length > 0" class="categories-grid">
+        <div class="category-card" *ngFor="let category of categories()">
+          <div class="card-header">
+            <div>
+              <h3>{{ category.name }}</h3>
+              <p class="slug">{{ category.slug }}</p>
+            </div>
+            <span class="badge-status" [class.active]="category.active" [class.inactive]="!category.active">
+              {{ category.active ? 'Attiva' : 'Inattiva' }}
+            </span>
+          </div>
+
+          <div class="card-body">
+            <p *ngIf="category.description" class="description">{{ category.description }}</p>
+            <p *ngIf="!category.description" class="description empty">Nessuna descrizione</p>
+            <p class="meta">
+              Creato: {{ category.createdAt | date: 'short' }}<br>
+              Aggiornato: {{ category.updatedAt | date: 'short' }}
+            </p>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-secondary btn-small" (click)="openEditForm(category)">
+              ✏️ Modifica
+            </button>
+            <button 
+              [class]="'btn btn-small ' + (category.active ? 'btn-danger' : 'btn-success')"
+              (click)="toggleActive(category)"
+            >
+              {{ category.active ? '🔒 Disattiva' : '🔓 Attiva' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Form -->
+    <div class="category-form" *ngIf="showForm()">
+      <div class="form-card">
+        <h2>{{ isEditing() ? 'Modifica Categoria' : 'Nuova Categoria' }}</h2>
+
+        <div class="form-group">
+          <label for="name">Nome *</label>
+          <input
+            id="name"
+            type="text"
+            [(ngModel)]="formData().name"
+            (ngModelChange)="generateSlug($event)"
+            placeholder="Es: Elettronica"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="slug">Slug *</label>
+          <input
+            id="slug"
+            type="text"
+            [(ngModel)]="formData().slug"
+            placeholder="Es: elettronica"
+            class="form-control"
+          />
+          <small>URL-friendly identifier (auto-generato dal nome)</small>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrizione</label>
+          <textarea
+            id="description"
+            [(ngModel)]="formData().description"
+            placeholder="Descrizione della categoria..."
+            class="form-control"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" (click)="submitForm()">
+            {{ isEditing() ? 'Salva Modifiche' : 'Crea Categoria' }}
+          </button>
+          <button class="btn btn-secondary" (click)="closeForm()">
+            Annulla
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

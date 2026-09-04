@@ -123,3 +123,9 @@ input[type='submit'] {
     scroll-behavior: auto !important;
   }
 }
+/* ========================================
+   GLOBAL APPLICATION STYLES
+   Main entry point that imports all CSS
+   ======================================== */
+
+@import './styles/index.css';

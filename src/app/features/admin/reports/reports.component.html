@@ -1,0 +1,182 @@
+<div class="container">
+  <div class="admin-header">
+    <h1>Moderazione Segnalazioni</h1>
+    <p>Gestisci e rivedi le segnalazioni degli utenti</p>
+  </div>
+
+  <div class="admin-filters">
+    <div class="filter-group">
+      <label for="status-filter">Filtra per stato:</label>
+      <select 
+        id="status-filter"
+        [(ngModel)]="filterStatus" 
+        (ngModelChange)="onFilterChange()"
+        class="form-control"
+      >
+        <option value="">Tutti gli stati</option>
+        <option value="aperta">Aperta</option>
+        <option value="in_revisione">In Revisione</option>
+        <option value="risolta">Risolta</option>
+        <option value="respinta">Respinta</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="admin-content">
+    <!-- Reports List -->
+    <div class="reports-list" *ngIf="!selectedReport()">
+      <div *ngIf="loading()" class="loading">Caricamento...</div>
+      
+      <div *ngIf="!loading() && reports().length === 0" class="empty-state">
+        <p>Nessuna segnalazione trovata</p>
+      </div>
+
+      <div *ngIf="!loading() && reports().length > 0" class="reports-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reporter</th>
+              <th>Segnalato</th>
+              <th>Motivo</th>
+              <th>Stato</th>
+              <th>Data</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reports()" class="report-row">
+              <td>#{{ report.id }}</td>
+              <td>{{ report.reporterUsername }}</td>
+              <td>{{ report.reportedUsername || report.reportedUserId || 'N/A' }}</td>
+              <td class="reason">{{ report.reason }}</td>
+              <td>
+                <span class="badge" [style.backgroundColor]="getStatusColor(report.status)">
+                  {{ report.status }}
+                </span>
+              </td>
+              <td>{{ report.createdAt | date: 'short' }}</td>
+              <td>
+                <button class="btn-small btn-primary" (click)="viewDetail(report)">
+                  Vedi Dettagli
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div class="detail-modal" *ngIf="selectedReport()" [@fadeIn]>
+      <div class="modal-overlay" (click)="closeDetail()"></div>
+      <div class="modal-content">
+        <button class="btn-close" (click)="closeDetail()">✕</button>
+        
+        <h2>Dettagli Segnalazione #{{ selectedReport()!.id }}</h2>
+
+        <div class="detail-section">
+          <h3>Informazioni Generali</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Reporter:</label>
+              <p>{{ selectedReport()!.reporterUsername }} (ID: {{ selectedReport()!.reporterId }})</p>
+            </div>
+            <div class="detail-item">
+              <label>Segnalato:</label>
+              <p *ngIf="selectedReport()!.reportedUsername">
+                {{ selectedReport()!.reportedUsername }} (ID: {{ selectedReport()!.reportedUserId }})
+              </p>
+              <p *ngIf="!selectedReport()!.reportedUsername && selectedReport()!.reportedListingId">
+                Inserzione ID: {{ selectedReport()!.reportedListingId }}
+              </p>
+            </div>
+            <div class="detail-item">
+              <label>Motivo:</label>
+              <p>{{ selectedReport()!.reason }}</p>
+            </div>
+            <div class="detail-item">
+              <label>Stato:</label>
+              <p>
+                <span class="badge" [style.backgroundColor]="getStatusColor(selectedReport()!.status)">
+                  {{ selectedReport()!.status }}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <label>Descrizione:</label>
+          <p class="description-text">{{ selectedReport()!.description || 'Nessuna descrizione' }}</p>
+        </div>
+
+        <div class="detail-section" *ngIf="selectedReport()!.reviewedAt">
+          <h3>Revisione</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Rivisto da:</label>
+              <p>{{ selectedReport()!.reviewedByUsername }} (ID: {{ selectedReport()!.reviewedById }})</p>
+            </div>
+            <div class="detail-item">
+              <label>Data Revisione:</label>
+              <p>{{ selectedReport()!.reviewedAt | date: 'medium' }}</p>
+            </div>
+            <div class="detail-item">
+              <label>Note Risoluzione:</label>
+              <p>{{ selectedReport()!.resolutionNote || 'Nessuna nota' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section" *ngIf="!showReviewForm()">
+          <button 
+            *ngIf="selectedReport()!.status === 'aperta'"
+            class="btn btn-primary" 
+            (click)="openReviewForm()"
+          >
+            Rivedi Segnalazione
+          </button>
+        </div>
+
+        <!-- Review Form -->
+        <div class="detail-section" *ngIf="showReviewForm()">
+          <h3>Rivedi Segnalazione</h3>
+          <div class="form-group">
+            <label for="review-status">Stato:</label>
+            <select 
+              id="review-status"
+              [(ngModel)]="reviewStatus" 
+              class="form-control"
+            >
+              <option value="">Seleziona stato</option>
+              <option value="in_revisione">In Revisione</option>
+              <option value="risolta">Risolta</option>
+              <option value="respinta">Respinta</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="review-note">Note (opzionale):</label>
+            <textarea 
+              id="review-note"
+              [(ngModel)]="reviewNote"
+              placeholder="Aggiungi note sulla decisione..."
+              class="form-control"
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" (click)="submitReview()">
+              Conferma Revisione
+            </button>
+            <button class="btn btn-secondary" (click)="showReviewForm.set(false)">
+              Annulla
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

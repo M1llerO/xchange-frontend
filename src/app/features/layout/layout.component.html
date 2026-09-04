@@ -1,0 +1,100 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">
+      <a routerLink="/dashboard">
+        <span class="logo-icon">💱</span>
+        Xchange
+      </a>
+    </div>
+
+    <ul class="nav-menu" [class.active]="menuOpen()">
+      <!-- Public Links -->
+      <li class="nav-item">
+        <a routerLink="/listings" routerLinkActive="active">
+          Browse
+        </a>
+      </li>
+
+      <!-- User Links (requires login) -->
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/dashboard" routerLinkActive="active">
+          Dashboard
+        </a>
+      </li>
+
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/items" routerLinkActive="active">
+          My Items
+        </a>
+      </li>
+
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/offers" routerLinkActive="active">
+          Offers
+        </a>
+      </li>
+
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/messages" routerLinkActive="active">
+          Messages
+        </a>
+      </li>
+
+      <!-- Admin Links -->
+      <li *ngIf="authService.hasRole('ADMIN')" class="nav-item admin">
+        <a routerLink="/admin/reports" routerLinkActive="active">
+          Reports
+        </a>
+      </li>
+
+      <li *ngIf="authService.hasRole('ADMIN')" class="nav-item admin">
+        <a routerLink="/admin/categories" routerLinkActive="active">
+          Categories
+        </a>
+      </li>
+
+      <!-- Auth Links -->
+      <li *ngIf="!authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/login" class="btn-login">
+          Login
+        </a>
+      </li>
+
+      <li *ngIf="!authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/register" class="btn-register">
+          Register
+        </a>
+      </li>
+
+      <!-- User Menu -->
+      <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown()">
+          {{ authService.getUsername() || 'Profile' }}
+          <span class="caret">▼</span>
+        </button>
+        <ul class="dropdown-menu" [class.active]="dropdownOpen()">
+          <li>
+            <a routerLink="/profile">View Profile</a>
+          </li>
+          <li>
+            <a routerLink="/settings">Settings</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a (click)="logout()" class="logout-link">Logout</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="hamburger" [class.active]="menuOpen()" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

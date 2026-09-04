@@ -1,0 +1,93 @@
+/* ========================================
+   AUTH PAGES (LOGIN & REGISTER)
+   ======================================== */
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--primary-gradient);
+  padding: var(--spacing-md);
+}
+
+.auth-card {
+  background: var(--bg-white);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-medium);
+  width: 100%;
+  max-width: 450px;
+}
+
+.auth-card h1 {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  color: var(--text-dark);
+}
+
+.auth-card p {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+  color: var(--text-light);
+}
+
+.auth-card a {
+  color: var(--primary-start);
+  font-weight: var(--font-semibold);
+}
+
+.auth-card a:hover {
+  text-decoration: underline;
+}
+
+.password-strength {
+  font-size: var(--font-sm);
+  font-weight: var(--font-semibold);
+  margin-top: var(--spacing-sm);
+}
+
+.strength-weak {
+  color: var(--danger);
+}
+
+.strength-fair {
+  color: var(--warning);
+}
+
+.strength-good {
+  color: var(--info);
+}
+
+.strength-strong {
+  color: var(--success);
+}
+
+.password-requirements {
+  font-size: var(--font-xs);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--bg-light);
+  border-radius: var(--radius-sm);
+}
+
+.password-requirements p {
+  margin: var(--spacing-xs) 0;
+  color: var(--text-muted);
+}
+
+.password-requirements p.met {
+  color: var(--success);
+}
+
+@media (max-width: 768px) {
+  .auth-card {
+    padding: var(--spacing-lg);
+    max-width: 100%;
+  }
+
+  .auth-container {
+    min-height: auto;
+    padding: var(--spacing-lg);
+  }
+}
