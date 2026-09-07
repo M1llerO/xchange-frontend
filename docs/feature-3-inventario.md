@@ -84,6 +84,12 @@ utility, piu' le rotte.
 Tutte con canActivate: [authGuard]. Sono lazy: loadComponent con import()
 dinamico, quindi ogni schermo e' un chunk separato caricato solo quando serve.
 
+Dopo il merge con il lavoro del compagno, queste 4 rotte sono figlie della
+rotta radice che monta LayoutComponent (il guscio con la navbar). Quindi gli
+schermi Item vengono renderizzati dentro il layout comune, non a pagina piena.
+La rotta segnaposto "items" -> ItemsComponent che c'era nel branch del compagno
+e' stata rimossa e sostituita da queste.
+
 
 ## 5. Workflow utente, passo per passo
 
@@ -281,9 +287,9 @@ I 401 e 403 sono gestiti a monte dall'errorInterceptor (logout / forbidden).
 
 ## 8. Cosa manca / da rifinire
 
-    1. Committare: la feature e' tutta in file non tracciati da git.
-    2. Navigazione: app.html e' ancora la pagina placeholder di Angular.
-       Nessun link nel menu porta a /items (vale per tutte le feature).
+    1. (fatto) Committata e mergiata col branch del compagno.
+    2. Navigazione: LayoutComponent (dal merge) ha la navbar. Verificare che ci
+       sia una voce di menu verso /items e che punti alla rotta giusta.
     3. Il confirm di "Elimina" dice "non reversibile" ma il backend archivia.
        Meglio: parlare di "archiviazione" e ricaricare la lista invece di
        togliere la card a mano.

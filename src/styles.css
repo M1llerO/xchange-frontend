@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
 
+/* Sistema CSS condiviso (buttons, cards, forms, layout, pagine). Deve stare
+   qui in cima: un @import dopo le regole viene ignorato. */
+@import './styles/index.css';
+
 :root {
   /* Brand */
   --color-primary: #7C3AED;

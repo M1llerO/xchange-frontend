@@ -1,0 +1,93 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>Register</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter username"
+          autocomplete="username"
+        />
+        <div class="error" *ngIf="isFieldInvalid('username')">
+          <span *ngIf="form.get('username')?.errors?.['required']">Username is required</span>
+          <span *ngIf="form.get('username')?.errors?.['minlength']">Username must be at least 3 characters</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email"
+          autocomplete="email"
+        />
+        <div class="error" *ngIf="isFieldInvalid('email')">
+          <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="form.get('email')?.errors?.['email']">Invalid email format</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter strong password"
+          autocomplete="new-password"
+        />
+        <div class="password-strength" [ngClass]="getPasswordStrengthClass()">
+          {{ getPasswordStrengthText() }}
+        </div>
+        <div class="password-requirements">
+          <p [class.met]="hasMinLength()">✓ At least 8 characters</p>
+          <p [class.met]="hasUpperCase()">✓ Contains uppercase (A-Z)</p>
+          <p [class.met]="hasLowerCase()">✓ Contains lowercase (a-z)</p>
+          <p [class.met]="hasNumber()">✓ Contains number (0-9)</p>
+          <p [class.met]="hasSpecialChar()">✓ Contains special character (!@#$%^&*)</p>
+        </div>
+        <div class="error" *ngIf="isFieldInvalid('password')">
+          <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="form.get('password')?.errors?.['strongPassword']">Password does not meet strength requirements</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirm password"
+          autocomplete="new-password"
+        />
+        <div class="error" *ngIf="isFieldInvalid('confirmPassword')">
+          <span *ngIf="form.get('confirmPassword')?.errors?.['required']">Please confirm password</span>
+          <span *ngIf="form.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not match</span>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading()"
+        class="btn-primary"
+      >
+        {{ loading() ? 'Registering...' : 'Register' }}
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage()" class="error-message">
+      {{ errorMessage() }}
+    </div>
+
+    <p>
+      Already have an account?
+      <a routerLink="/login">Login here</a>
+    </p>
+  </div>
+</div>
