@@ -1,0 +1,36 @@
+<section class="review-form">
+  <a class="back-link" routerLink="/reviews">&larr; Scambi da recensire</a>
+  <h1>Recensisci scambio #{{ exchangeId }}</h1>
+
+  @if (submitted(); as review) {
+    <div class="success">
+      <p>Recensione inviata: {{ review.rating }}/5.</p>
+      <a routerLink="/reviews">Torna agli scambi da recensire</a>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <fieldset class="rating-field">
+        <legend>Voto</legend>
+        <div class="rating-options">
+          @for (value of ratings; track value) {
+            <label>
+              <input type="radio" formControlName="rating" [value]="value" />
+              {{ value }}
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <label class="comment-field">
+        Commento (opzionale)
+        <textarea formControlName="comment" rows="4" maxlength="1000"></textarea>
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || submitting()">Invia recensione</button>
+    </form>
+  }
+</section>

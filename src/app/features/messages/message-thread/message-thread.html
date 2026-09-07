@@ -1,0 +1,31 @@
+<section class="thread">
+  <a class="back-link" routerLink="/messages">&larr; Tutti i messaggi</a>
+  <h1>{{ otherParticipantName() ?? ('Trattativa #' + offerId) }}</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else {
+    <ul class="message-list">
+      @for (message of messages(); track message.id) {
+        <li class="message-row" [class.mine]="isMine(message)">
+          <div class="bubble">
+            <span class="sender">{{ message.senderUsername }}</span>
+            <p class="body">{{ message.body }}</p>
+            @if (isMine(message)) {
+              <button type="button" class="delete-btn" (click)="remove(message)">Elimina</button>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <form class="composer" [formGroup]="form" (ngSubmit)="send()">
+      <textarea formControlName="body" rows="2" placeholder="Scrivi un messaggio…"></textarea>
+      <button type="submit" [disabled]="form.invalid || sending()">Invia</button>
+    </form>
+  }
+</section>

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment';
-import { LoginRequest, LoginResponse } from '../models/auth.model';
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from '../models/auth.model';
 
 interface JwtClaims {
   sub: string;
@@ -15,16 +15,35 @@ interface JwtClaims {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private baseUrl = `${environment.apiUrl}/auth`;
+  private isLoggedInSignal = signal(this.checkLoggedIn());
 
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, credentials)
-      .pipe(tap(res => this.saveToken(res.token)));
+      .pipe(tap(res => {
+        this.saveToken(res.token);
+        this.isLoggedInSignal.set(true);
+      }));
   }
 
-  logout(): void {
+  register(data: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, data);
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/logout`, {})
+      .pipe(
+        tap(() => {
+          localStorage.removeItem('token');
+          this.isLoggedInSignal.set(false);
+        })
+      );
+  }
+  
+  logoutSync(): void {
     localStorage.removeItem('token');
+    this.isLoggedInSignal.set(false);
   }
 
   saveToken(token: string): void {
@@ -61,6 +80,14 @@ export class AuthService {
 
   hasRole(role: string): boolean {
     return this.getClaims()?.roles.includes(role) ?? false;
+  }
+
+  getIsLoggedIn() {
+    return this.isLoggedInSignal.asReadonly();
+  }
+
+  private checkLoggedIn(): boolean {
+    return this.isLoggedIn();
   }
 
   private isExpired(token: string): boolean {

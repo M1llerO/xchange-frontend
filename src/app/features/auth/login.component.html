@@ -1,0 +1,51 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>Login</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter username"
+          autocomplete="username"
+        />
+        <div class="error" *ngIf="isFieldInvalid('username')">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+        />
+        <div class="error" *ngIf="isFieldInvalid('password')">
+          Password is required
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading()"
+        class="btn-primary"
+      >
+        {{ loading() ? 'Logging in...' : 'Login' }}
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage()" class="error-message">
+      {{ errorMessage() }}
+    </div>
+
+    <p>
+      Don't have an account?
+      <a routerLink="/register">Register here</a>
+    </p>
+  </div>
+</div>

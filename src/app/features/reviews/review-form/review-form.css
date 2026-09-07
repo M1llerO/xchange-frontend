@@ -1,0 +1,105 @@
+.review-form {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.back-link {
+  align-self: flex-start;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+fieldset {
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+legend {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  padding: 0 var(--space-1);
+}
+
+.rating-options {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.rating-options label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.comment-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-weight: 600;
+}
+
+.comment-field textarea {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  padding: var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+
+.comment-field textarea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+button[type='submit'] {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-cta);
+  color: var(--color-neutral-0);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+button[type='submit']:hover:not(:disabled) {
+  background: var(--color-cta-dark);
+}
+
+button[type='submit']:disabled {
+  background: var(--color-neutral-400);
+  cursor: default;
+}
+
+.success {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-cta);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.success a {
+  color: var(--color-primary);
+}

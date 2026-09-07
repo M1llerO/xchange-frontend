@@ -1,0 +1,127 @@
+.thread {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.back-link {
+  align-self: flex-start;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+.hint {
+  color: var(--color-neutral-600);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.message-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.message-row {
+  display: flex;
+}
+
+.message-row.mine {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 75%;
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+.message-row.mine .bubble {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-neutral-0);
+}
+
+.sender {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-neutral-600);
+}
+
+.message-row.mine .sender {
+  color: var(--color-neutral-0);
+}
+
+.body {
+  margin: var(--space-1) 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.delete-btn {
+  margin-top: var(--space-1);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--font-size-xs);
+  color: inherit;
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+}
+
+.composer {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-end;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: vertical;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  padding: var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+}
+
+.composer textarea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.composer button {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-neutral-0);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+.composer button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.composer button:disabled {
+  background: var(--color-neutral-400);
+  cursor: default;
+}
