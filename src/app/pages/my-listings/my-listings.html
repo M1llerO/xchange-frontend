@@ -1,0 +1,10 @@
+@for (elemento of listings; track elemento.id) {
+  <div>
+    <div>{{ elemento.city }}</div>
+    <div>Stato attuale: {{ elemento.status }}</div>
+
+    @if (elemento.status !== 'eliminato') {
+      <button (click)="cancelListing(elemento)">Elimina annuncio</button>
+    }
+  </div>
+}

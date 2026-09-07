@@ -1,0 +1,19 @@
+<form (submit)="onSubmit($event)">
+
+  <label>Città</label>
+  <input [formField]="myForm.city" />
+
+  <label>Categorie accettate</label>
+  @for (categoria of categories; track categoria.id) {
+    <div>
+      <input
+        type="checkbox"
+        (change)="toggleCategory(categoria.id)"
+      />
+      <label>{{ categoria.name }}</label>
+    </div>
+  }
+
+  <button type="submit">Pubblica</button>
+
+</form>
