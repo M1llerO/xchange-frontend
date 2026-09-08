@@ -11,6 +11,8 @@
    1. Design tokens — dark theme (default)
    --------------------------------------------------------------------- */
 :root {
+  color-scheme: dark;
+
   /* Brand */
   --color-bg: #05060A;
   --color-surface: #10131C;
@@ -118,6 +120,8 @@
    a future control just needs to set data-theme="light" on <html>)
    --------------------------------------------------------------------- */
 [data-theme='light'] {
+  color-scheme: light;
+
   --color-bg: #F4F7FF;
   --color-surface: #FFFFFF;
   --color-surface-alt: #EAF0FF;
