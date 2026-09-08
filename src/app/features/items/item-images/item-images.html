@@ -1,0 +1,84 @@
+<section class="item-images">
+  <a class="back-link" routerLink="/items">&larr; I miei oggetti</a>
+  <h1>Immagini — {{ itemTitle() || 'oggetto #' + itemId }}</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else {
+    <div class="uploader">
+      <label class="btn-primary" [class.disabled]="uploading() || images().length >= maxImages">
+        {{ uploading() ? 'Caricamento…' : 'Aggiungi immagine' }}
+        <input
+          type="file"
+          [accept]="acceptAttr"
+          (change)="onFileSelected($event)"
+          [disabled]="uploading() || images().length >= maxImages"
+          hidden
+        />
+      </label>
+      <span class="counter">{{ images().length }} / {{ maxImages }}</span>
+      @if (savingOrder()) {
+        <span class="hint">Salvataggio ordine…</span>
+      }
+    </div>
+
+    <p class="upload-help">Formati ammessi: JPG, PNG, WebP · massimo 5 MB per file.</p>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (images().length === 0) {
+      <p class="hint">Nessuna immagine. Aggiungine una per rendere l'oggetto più riconoscibile.</p>
+    } @else {
+      <ul class="image-list">
+        @for (image of images(); track image.id; let i = $index) {
+          <li
+            class="image-row"
+            [class.dragging]="dragIndex() === i"
+            draggable="true"
+            (dragstart)="onDragStart(i)"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop(i)"
+            (dragend)="onDragEnd()"
+          >
+            <span class="position" aria-hidden="true">{{ i + 1 }}</span>
+            <img
+              [src]="resolveAssetUrl(image.url)"
+              [alt]="'Immagine ' + (i + 1) + ' di ' + images().length"
+            />
+
+            <div class="row-actions">
+              <button
+                type="button"
+                class="icon-btn"
+                (click)="moveUp(i)"
+                [disabled]="i === 0 || savingOrder()"
+                [attr.aria-label]="'Sposta immagine ' + (i + 1) + ' in su'"
+              >
+                Su
+              </button>
+              <button
+                type="button"
+                class="icon-btn"
+                (click)="moveDown(i)"
+                [disabled]="i === images().length - 1 || savingOrder()"
+                [attr.aria-label]="'Sposta immagine ' + (i + 1) + ' in giù'"
+              >
+                Giù
+              </button>
+              <button
+                type="button"
+                class="btn-danger"
+                (click)="remove(image)"
+                [attr.aria-label]="'Elimina immagine ' + (i + 1)"
+              >
+                Elimina
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

@@ -1,0 +1,78 @@
+<section class="item-form">
+  <a class="back-link" routerLink="/items">&larr; I miei oggetti</a>
+  <h1>{{ isEdit ? 'Modifica oggetto' : 'Nuovo oggetto' }}</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label class="field">
+        <span class="field-label">Categoria *</span>
+        <select formControlName="categoryId">
+          <option [ngValue]="null" disabled>Seleziona una categoria</option>
+          @for (category of categories(); track category.id) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+          }
+        </select>
+        @if (form.controls.categoryId.touched && form.controls.categoryId.invalid) {
+          <span class="field-error">Seleziona una categoria.</span>
+        }
+      </label>
+
+      <label class="field">
+        <span class="field-label">Titolo *</span>
+        <input type="text" formControlName="title" maxlength="120" />
+        @if (form.controls.title.touched && form.controls.title.invalid) {
+          <span class="field-error">Il titolo è obbligatorio (max 120 caratteri).</span>
+        }
+      </label>
+
+      <label class="field">
+        <span class="field-label">Descrizione *</span>
+        <textarea formControlName="description" rows="5" maxlength="2000"></textarea>
+        @if (form.controls.description.touched && form.controls.description.invalid) {
+          <span class="field-error">La descrizione è obbligatoria (max 2000 caratteri).</span>
+        }
+      </label>
+
+      <label class="field">
+        <span class="field-label">Valore stimato (€)</span>
+        <input type="number" formControlName="estimatedValue" min="0" step="0.01" />
+        @if (form.controls.estimatedValue.touched && form.controls.estimatedValue.invalid) {
+          <span class="field-error">Il valore non può essere negativo.</span>
+        }
+      </label>
+
+      <label class="field">
+        <span class="field-label">Condizione *</span>
+        <select formControlName="itemCondition">
+          <option value="" disabled>Seleziona una condizione</option>
+          @for (option of conditionOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+        @if (form.controls.itemCondition.touched && form.controls.itemCondition.invalid) {
+          <span class="field-error">Seleziona una condizione.</span>
+        }
+      </label>
+
+      @if (isEdit) {
+        <label class="field field-checkbox">
+          <input type="checkbox" formControlName="archived" />
+          <span>Oggetto archiviato (nascosto dagli elenchi predefiniti)</span>
+        </label>
+      }
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || submitting()">
+          {{ isEdit ? 'Salva modifiche' : 'Crea e aggiungi foto' }}
+        </button>
+        <a class="btn-ghost" routerLink="/items">Annulla</a>
+      </div>
+    </form>
+  }
+</section>

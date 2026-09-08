@@ -1,0 +1,100 @@
+<section class="items-page">
+  <header class="page-header">
+    <h1>I miei oggetti</h1>
+    <a class="btn-primary" routerLink="/items/new">Nuovo oggetto</a>
+  </header>
+
+  <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
+    <div class="field">
+      <label for="f-q">Parola chiave</label>
+      <input id="f-q" type="text" formControlName="q" placeholder="Titolo o descrizione" />
+    </div>
+
+    <div class="field">
+      <label for="f-category">Categoria</label>
+      <select id="f-category" formControlName="categoryId">
+        <option [ngValue]="null">Tutte</option>
+        @for (category of categories(); track category.id) {
+          <option [ngValue]="category.id">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-condition">Condizione</label>
+      <select id="f-condition" formControlName="condition">
+        <option value="">Tutte</option>
+        @for (option of conditionOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-min">Valore min (€)</label>
+      <input id="f-min" type="number" min="0" step="0.01" formControlName="minValue" />
+    </div>
+
+    <div class="field">
+      <label for="f-max">Valore max (€)</label>
+      <input id="f-max" type="number" min="0" step="0.01" formControlName="maxValue" />
+    </div>
+
+    <label class="field field-checkbox">
+      <input type="checkbox" formControlName="includeArchived" />
+      Includi archiviati
+    </label>
+
+    <div class="filters-actions">
+      <button type="submit" class="btn-primary">Applica filtri</button>
+      <button type="button" class="btn-ghost" (click)="resetFilters()">Azzera</button>
+    </div>
+  </form>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (items().length === 0) {
+    <p class="hint">Nessun oggetto trovato. Prova a modificare i filtri o creane uno nuovo.</p>
+  } @else {
+    <ul class="item-grid">
+      @for (item of items(); track item.id) {
+        <li class="item-card" [class.archived]="item.archived">
+          <div class="thumb">
+            @if (primaryImageUrl(item); as url) {
+              <img [src]="url" [alt]="'Foto di ' + item.title" loading="lazy" />
+            } @else {
+              <span class="thumb-empty">Nessuna foto</span>
+            }
+          </div>
+
+          <div class="item-body">
+            <h2 class="item-title">{{ item.title }}</h2>
+            <p class="item-meta">
+              <span>{{ item.categoryName }}</span>
+              <span>·</span>
+              <span>{{ conditionLabels[item.itemCondition] }}</span>
+            </p>
+            <p class="item-value">
+              @if (item.estimatedValue !== null) {
+                {{ item.estimatedValue | number: '1.2-2' }} €
+              } @else {
+                Valore non stimato
+              }
+            </p>
+            @if (item.archived) {
+              <span class="badge">Archiviato</span>
+            }
+          </div>
+
+          <div class="item-actions">
+            <a class="btn-ghost" [routerLink]="['/items', item.id, 'edit']">Modifica</a>
+            <a class="btn-ghost" [routerLink]="['/items', item.id, 'images']">Immagini</a>
+            <button type="button" class="btn-danger" (click)="remove(item)">Elimina</button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>
