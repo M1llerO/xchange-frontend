@@ -1,0 +1,42 @@
+<section class="profile">
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (profile(); as p) {
+    <div class="header">
+      <h1>{{ p.username }}</h1>
+      @if (!isOwnProfile()) {
+        <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ userId: p.userId }">
+          Segnala utente
+        </a>
+      }
+    </div>
+
+    <div class="rating-summary">
+      @if (p.averageRating !== null) {
+        <span class="average">{{ p.averageRating | number: '1.1-1' }} / 5</span>
+        <span class="count">({{ p.reviewsCount }} recensioni)</span>
+      } @else {
+        <span class="count">Nessuna recensione</span>
+      }
+    </div>
+
+    @if (p.reviews.length > 0) {
+      <ul class="review-list">
+        @for (review of p.reviews; track review.id) {
+          <li class="review-row">
+            <div class="review-header">
+              <span class="author">{{ review.authorUsername }}</span>
+              <span class="rating">{{ review.rating }}/5</span>
+              <span class="date">{{ review.createdAt | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            @if (review.comment) {
+              <p class="comment">{{ review.comment }}</p>
+            }
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

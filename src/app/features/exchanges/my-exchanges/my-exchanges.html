@@ -1,0 +1,56 @@
+<section class="exchanges">
+  <h1>I miei scambi</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (exchanges().length === 0) {
+    <p class="hint">Nessuno scambio ancora.</p>
+  } @else {
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <ul class="exchange-list">
+      @for (exchange of exchanges(); track exchange.id) {
+        <li class="exchange-row">
+          <div class="exchange-header">
+            <span class="label">Scambio #{{ exchange.id }}</span>
+            <span class="status" [attr.data-status]="exchange.status">{{ exchange.status }}</span>
+          </div>
+
+          <a class="counterpart" [routerLink]="['/profile', counterpartId(exchange)]">
+            Vedi il profilo della controparte
+          </a>
+
+          @if (exchange.status === 'in_corso') {
+            <div class="actions">
+              @if (hasConfirmed(exchange)) {
+                <span class="confirmed-hint">Hai già confermato, in attesa dell'altra parte.</span>
+              } @else {
+                <button
+                  type="button"
+                  (click)="confirm(exchange)"
+                  [disabled]="actingId() === exchange.id"
+                >
+                  Conferma scambio
+                </button>
+              }
+              <button
+                type="button"
+                class="cancel"
+                (click)="cancel(exchange)"
+                [disabled]="actingId() === exchange.id"
+              >
+                Annulla
+              </button>
+            </div>
+          }
+
+          @if (exchange.status === 'completato') {
+            <a class="review-link" [routerLink]="['/reviews/new', exchange.id]">Lascia una recensione</a>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

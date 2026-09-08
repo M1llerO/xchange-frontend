@@ -1,0 +1,36 @@
+<section class="report-form">
+  <a class="back-link" routerLink="/reports/mine">&larr; Le mie segnalazioni</a>
+
+  @if (!targetUserId && !targetListingId) {
+    <p class="error">Nessun utente o annuncio da segnalare specificato.</p>
+  } @else if (submitted()) {
+    <div class="success">
+      <p>Segnalazione inviata. Verrà esaminata da un moderatore.</p>
+      <a routerLink="/reports/mine">Vai alle mie segnalazioni</a>
+    </div>
+  } @else {
+    <h1>{{ targetUserId ? 'Segnala utente #' + targetUserId : 'Segnala annuncio #' + targetListingId }}</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        Motivo
+        <select formControlName="reason">
+          @for (reason of reasons; track reason) {
+            <option [value]="reason">{{ reasonLabels[reason] }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        Descrizione (opzionale)
+        <textarea formControlName="description" rows="4" maxlength="1000"></textarea>
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || submitting()">Invia segnalazione</button>
+    </form>
+  }
+</section>

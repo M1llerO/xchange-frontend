@@ -21,7 +21,17 @@ export const routes: Routes = [
       },
       {
         path: 'listings',
-        loadComponent: () => import('./features/listings/listings.component').then(m => m.ListingsComponent)
+        loadComponent: () => import('./features/listings/listing-search/listing-search').then(m => m.ListingSearch)
+      },
+      {
+        path: 'listings/new',
+        loadComponent: () => import('./features/listings/create-listing/create-listing').then(m => m.CreateListing),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'listings/mine',
+        loadComponent: () => import('./features/listings/my-listings/my-listings').then(m => m.MyListings),
+        canActivate: [authGuard]
       },
       {
         path: 'items',
@@ -49,6 +59,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
       },
       {
+        path: 'exchanges',
+        loadComponent: () => import('./features/exchanges/my-exchanges/my-exchanges').then(m => m.MyExchanges),
+        canActivate: [authGuard]
+      },
+      {
         path: 'messages',
         loadComponent: () => import('./features/messages/message-inbox/message-inbox').then(m => m.MessageInbox),
         canActivate: [authGuard]
@@ -71,6 +86,21 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'profile/:id',
+        loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'reports/new',
+        loadComponent: () => import('./features/reports/report-form/report-form').then(m => m.ReportForm),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'reports/mine',
+        loadComponent: () => import('./features/reports/my-reports/my-reports').then(m => m.MyReports),
         canActivate: [authGuard]
       },
       {

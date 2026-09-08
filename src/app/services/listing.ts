@@ -5,10 +5,10 @@ import { buildParams } from '../core/http-params.util';
 import {
   CreateListingRequest,
   Listing,
+  ListingSearchDto,
   ListingStatus
 } from '../models/listing.model';
 
-type ListingSearchDto = Listing;
 type ListingSearchParams = Record<string, string | number | boolean | null | undefined>;
 
 @Injectable({ providedIn: 'root' })

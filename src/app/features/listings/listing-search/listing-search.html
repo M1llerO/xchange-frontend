@@ -1,0 +1,50 @@
+<section class="search">
+  <h1>Cerca oggetti</h1>
+
+  <form class="filters" [formGroup]="form" (ngSubmit)="search()">
+    <input type="text" formControlName="keyword" placeholder="Cerca per titolo…" />
+
+    <select formControlName="categoryId">
+      <option value="">Tutte le categorie</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+
+    <input type="number" formControlName="minPrice" placeholder="Prezzo min" min="0" />
+    <input type="number" formControlName="maxPrice" placeholder="Prezzo max" min="0" />
+
+    <button type="submit">Cerca</button>
+    <button type="button" class="reset" (click)="resetFilters()">Reset</button>
+  </form>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (results().length === 0) {
+    <p class="hint">Nessun annuncio trovato.</p>
+  } @else {
+    <ul class="listing-grid">
+      @for (listing of results(); track listing.id) {
+        <li class="listing-card">
+          @if (imageUrl(listing); as url) {
+            <img [src]="url" [alt]="listing.itemTitle" />
+          } @else {
+            <div class="no-image">Nessuna immagine</div>
+          }
+          <div class="listing-body">
+            <h2>{{ listing.itemTitle }}</h2>
+            <p class="category">{{ listing.categoryName }} · {{ listing.city }}</p>
+            @if (listing.itemEstimatedValue !== null) {
+              <p class="value">{{ listing.itemEstimatedValue | number: '1.0-2' }} €</p>
+            }
+            <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ listingId: listing.id }">
+              Segnala annuncio
+            </a>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

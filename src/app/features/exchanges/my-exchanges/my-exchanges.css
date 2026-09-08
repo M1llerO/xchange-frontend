@@ -1,0 +1,123 @@
+.exchanges {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.hint {
+  color: var(--color-neutral-600);
+}
+
+.error {
+  color: var(--color-danger);
+  margin-bottom: var(--space-3);
+}
+
+.exchange-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.exchange-row {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.exchange-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.status {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: capitalize;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+
+.status[data-status='in_corso'] {
+  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  color: var(--color-warning);
+}
+
+.status[data-status='completato'] {
+  background: color-mix(in srgb, var(--color-cta) 15%, transparent);
+  color: var(--color-cta-dark);
+}
+
+.status[data-status='annullato'] {
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+  color: var(--color-danger);
+}
+
+.counterpart {
+  align-self: flex-start;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actions button {
+  padding: var(--space-1) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  background: var(--color-cta);
+  color: var(--color-neutral-0);
+  transition: background-color var(--transition-fast);
+}
+
+.actions button:hover:not(:disabled) {
+  background: var(--color-cta-dark);
+}
+
+.actions button:disabled {
+  background: var(--color-neutral-400);
+  cursor: default;
+}
+
+.actions button.cancel {
+  background: var(--color-neutral-100);
+  color: var(--color-danger);
+}
+
+.actions button.cancel:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.confirmed-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.review-link {
+  align-self: flex-start;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-cta-dark);
+}

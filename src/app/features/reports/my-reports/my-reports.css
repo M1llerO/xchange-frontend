@@ -1,0 +1,85 @@
+.my-reports {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.hint {
+  color: var(--color-neutral-600);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.report-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.report-row {
+  position: relative;
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  padding-right: 120px;
+}
+
+.report-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.target {
+  font-weight: 600;
+}
+
+.reason {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  text-transform: capitalize;
+}
+
+.status {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+
+.status[data-status='aperta'] {
+  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  color: var(--color-warning);
+}
+
+.status[data-status='in_revisione'] {
+  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  color: var(--color-primary);
+}
+
+.status[data-status='risolta'] {
+  background: color-mix(in srgb, var(--color-cta) 15%, transparent);
+  color: var(--color-cta-dark);
+}
+
+.status[data-status='respinta'] {
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+  color: var(--color-danger);
+}
+
+.note {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
