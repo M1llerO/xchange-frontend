@@ -48,7 +48,17 @@
             <tr *ngFor="let report of reports()" class="report-row">
               <td>#{{ report.id }}</td>
               <td>{{ report.reporterUsername }}</td>
-              <td>{{ report.reportedUsername || report.reportedUserId || 'N/A' }}</td>
+              <td>
+                <ng-container *ngIf="report.reportedUsername; else reportedListingOrNa">
+                  {{ report.reportedUsername }}
+                </ng-container>
+                <ng-template #reportedListingOrNa>
+                  <ng-container *ngIf="report.reportedListingId; else noTarget">
+                    Annuncio #{{ report.reportedListingId }}
+                  </ng-container>
+                  <ng-template #noTarget>N/A</ng-template>
+                </ng-template>
+              </td>
               <td class="reason">{{ report.reason }}</td>
               <td>
                 <span class="badge" [style.backgroundColor]="getStatusColor(report.status)">
@@ -68,7 +78,7 @@
     </div>
 
     <!-- Report Detail Modal -->
-    <div class="detail-modal" *ngIf="selectedReport()" [@fadeIn]>
+    <div class="detail-modal" *ngIf="selectedReport()">
       <div class="modal-overlay" (click)="closeDetail()"></div>
       <div class="modal-content">
         <button class="btn-close" (click)="closeDetail()">✕</button>

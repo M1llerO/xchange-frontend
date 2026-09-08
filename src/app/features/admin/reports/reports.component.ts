@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit {
 
   loadReports(): void {
     this.loading.set(true);
-    const status = this.filterStatus() as ReportStatus | undefined;
+    const status = this.filterStatus() || undefined;
     this.reportService.getAll(status).subscribe({
       next: (data) => {
         this.reports.set(data);
