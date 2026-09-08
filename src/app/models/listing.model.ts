@@ -21,3 +21,17 @@ export interface CreateListingRequest {
 export interface UpdateListingStatusRequest {
     status: ListingStatus;
 }
+
+export interface ListingSearchDto {
+  id: number;
+  city: string;
+  status: ListingStatus;
+  publishedAt: string;
+  itemId: number;
+  itemTitle: string;
+  itemDescription: string;
+  itemEstimatedValue: number | null;
+  categoryId: number;
+  categoryName: string;
+  primaryImageUrl: string | null;
+}

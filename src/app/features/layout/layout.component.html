@@ -35,8 +35,20 @@
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/exchanges" routerLinkActive="active">
+          Exchanges
+        </a>
+      </li>
+
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/messages" routerLinkActive="active">
           Messages
+        </a>
+      </li>
+
+      <li *ngIf="authService.isLoggedIn()" class="nav-item">
+        <a routerLink="/reviews" routerLinkActive="active">
+          Reviews
         </a>
       </li>
 
@@ -78,6 +90,9 @@
           </li>
           <li>
             <a routerLink="/settings">Settings</a>
+          </li>
+          <li>
+            <a routerLink="/reports/mine">My Reports</a>
           </li>
           <li class="divider"></li>
           <li>

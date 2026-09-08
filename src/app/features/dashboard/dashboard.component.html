@@ -1,21 +1,37 @@
 <div class="container">
   <h1>Dashboard</h1>
   <div class="dashboard-grid">
-    <div class="card">
-      <h2>My Items</h2>
-      <p>Manage your items for exchange</p>
-    </div>
-    <div class="card">
-      <h2>Active Offers</h2>
-      <p>View and manage your offers</p>
-    </div>
-    <div class="card">
-      <h2>Exchanges</h2>
-      <p>Track your exchange transactions</p>
-    </div>
-    <div class="card">
-      <h2>Messages</h2>
-      <p>Communicate with other users</p>
-    </div>
+    <a class="card" routerLink="/items">
+      <h2>I miei oggetti</h2>
+      <p>Gestisci gli oggetti che possiedi</p>
+    </a>
+    <a class="card" routerLink="/listings/mine">
+      <h2>I miei annunci</h2>
+      <p>Gli annunci che hai pubblicato</p>
+    </a>
+    <a class="card" routerLink="/listings/new">
+      <h2>Pubblica un annuncio</h2>
+      <p>Metti in scambio un oggetto</p>
+    </a>
+    <a class="card" routerLink="/listings">
+      <h2>Cerca oggetti</h2>
+      <p>Sfoglia gli annunci disponibili</p>
+    </a>
+    <a class="card" routerLink="/offers">
+      <h2>Offerte</h2>
+      <p>Gestisci le tue offerte</p>
+    </a>
+    <a class="card" routerLink="/exchanges">
+      <h2>Scambi</h2>
+      <p>Traccia i tuoi scambi in corso e completati</p>
+    </a>
+    <a class="card" routerLink="/messages">
+      <h2>Messaggi</h2>
+      <p>Comunica con gli altri utenti</p>
+    </a>
+    <a class="card" routerLink="/reviews">
+      <h2>Recensioni</h2>
+      <p>Recensisci gli scambi completati</p>
+    </a>
   </div>
 </div>

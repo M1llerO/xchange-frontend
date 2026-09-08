@@ -5,6 +5,9 @@
   @if (submitted(); as review) {
     <div class="success">
       <p>Recensione inviata: {{ review.rating }}/5.</p>
+      @if (recipientId(); as id) {
+        <a [routerLink]="['/profile', id]">Vedi il profilo</a>
+      }
       <a routerLink="/reviews">Torna agli scambi da recensire</a>
     </div>
   } @else {

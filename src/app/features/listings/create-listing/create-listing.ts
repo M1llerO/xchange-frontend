@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { signal } from '@angular/core';
 import { form, FormField, submit } from '@angular/forms/signals';
-import { ListingsService } from '../../../services/listing.services';
+import { ListingService } from '../../../services/listing';
 import { CategoryService, Category } from '../../../services/category';
 import { ItemService } from '../../../services/item';
 import { ItemDto } from '../../../models/item.model';
@@ -16,7 +16,7 @@ import { CreateListingRequest } from '../../../models/listing.model';
 export class CreateListing implements OnInit {
 
   constructor(
-    private listingsService: ListingsService,
+    private listingService: ListingService,
     private categoryService: CategoryService,
     private itemService: ItemService
   ) {}
@@ -64,7 +64,7 @@ export class CreateListing implements OnInit {
 
     submit(this.myForm, async (field) => {
       const request: CreateListingRequest = field().value();
-      this.listingsService.create(request).subscribe();
+      this.listingService.create(request).subscribe();
     });
   }
 }

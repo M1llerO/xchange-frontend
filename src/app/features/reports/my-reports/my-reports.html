@@ -1,0 +1,32 @@
+<section class="my-reports">
+  <h1>Le mie segnalazioni</h1>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (reports().length === 0) {
+    <p class="hint">Non hai ancora inviato segnalazioni.</p>
+  } @else {
+    <ul class="report-list">
+      @for (report of reports(); track report.id) {
+        <li class="report-row">
+          <div class="report-main">
+            <span class="target">
+              @if (report.reportedUsername) {
+                Utente: {{ report.reportedUsername }}
+              } @else {
+                Annuncio #{{ report.reportedListingId }}
+              }
+            </span>
+            <span class="reason">{{ report.reason }}</span>
+          </div>
+          <span class="status" [attr.data-status]="report.status">{{ statusLabels[report.status] }}</span>
+          @if (report.resolutionNote) {
+            <p class="note">{{ report.resolutionNote }}</p>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

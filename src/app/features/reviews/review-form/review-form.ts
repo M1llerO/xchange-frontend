@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReviewService } from '../../../services/review';
+import { ExchangeService } from '../../../services/exchange';
+import { AuthService } from '../../../services/auth';
 import { extractErrorMessage } from '../../../core/api-error.util';
 import { ReviewSummaryDto } from '../../../models/review.model';
 
@@ -12,9 +14,11 @@ import { ReviewSummaryDto } from '../../../models/review.model';
   templateUrl: './review-form.html',
   styleUrl: './review-form.css'
 })
-export class ReviewForm {
+export class ReviewForm implements OnInit {
   private route = inject(ActivatedRoute);
   private reviewService = inject(ReviewService);
+  private exchangeService = inject(ExchangeService);
+  private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   exchangeId = Number(this.route.snapshot.paramMap.get('exchangeId'));
@@ -23,11 +27,22 @@ export class ReviewForm {
   submitting = signal(false);
   errorMessage = signal<string | null>(null);
   submitted = signal<ReviewSummaryDto | null>(null);
+  recipientId = signal<number | null>(null);
 
   form = this.fb.nonNullable.group({
     rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
     comment: ['', [Validators.maxLength(1000)]]
   });
+
+  ngOnInit(): void {
+    this.exchangeService.getById(this.exchangeId).subscribe({
+      next: (exchange) => {
+        const myId = this.authService.getUserId();
+        this.recipientId.set(exchange.ownerId === myId ? exchange.offererId : exchange.ownerId);
+      },
+      error: () => {}
+    });
+  }
 
   submit(): void {
     if (this.form.invalid || this.submitting()) {

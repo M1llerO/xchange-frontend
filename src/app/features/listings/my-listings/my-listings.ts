@@ -1,6 +1,6 @@
 
-import { ListingsService } from '../../../services/listing.services';
-import { Listing, ListingStatus } from '../../../models/listing.model';
+import { ListingService } from '../../../services/listing';
+import { Listing } from '../../../models/listing.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,26 +10,25 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './my-listings.html',
 })
 export class MyListings implements OnInit {
-  
- constructor(private listingsService: ListingsService) {}
- 
+
+ constructor(private listingService: ListingService) {}
+
  listings: Listing[] = [];
 
   ngOnInit() {
-    this.listingsService.getMine().subscribe((listings) => {
+    this.listingService.getMine().subscribe((listings) => {
       this.listings = listings;
     });
   }
 
   cancelListing(listing: Listing) {
-  this.listingsService.updateStatus(listing.id, { status: 'eliminato' }).subscribe(() => {
+  this.listingService.updateStatus(listing.id, 'eliminato').subscribe(() => {
     this.listings = this.listings.map(l =>
       l.id === listing.id ? { ...l, status: 'eliminato' } : l
     );
   });
 }
 
-  
 }
 
 
