@@ -13,6 +13,14 @@
       <label>{{ categoria.name }}</label>
     </div>
   }
+  
+<label>Oggetto da pubblicare</label>
+<select (change)="selectItem(+$any($event.target).value)">
+  <option value="">-- Seleziona --</option>
+  @for (item of items; track item.id) {
+    <option [value]="item.id">{{ item.title }}</option>
+  }
+</select>
 
   <button type="submit">Pubblica</button>
 

@@ -1,6 +1,6 @@
 
-import { ListingsService } from '../../services/listing.services';
-import { Listing, ListingStatus } from '../../models/listing.model';
+import { ListingsService } from '../../../services/listing.services';
+import { Listing, ListingStatus } from '../../../models/listing.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
