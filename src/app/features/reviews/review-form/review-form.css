@@ -91,7 +91,7 @@ button[type='submit']:disabled {
 }
 
 .success {
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-cta);
   border-radius: var(--radius-md);
   padding: var(--space-3);

@@ -22,6 +22,7 @@ export class ListingSearch implements OnInit {
 
   categories = signal<Category[]>([]);
   results = signal<ListingSearchDto[]>([]);
+  featured = signal<ListingSearchDto[]>([]);
   loading = signal(true);
   errorMessage = signal<string | null>(null);
 
@@ -37,7 +38,20 @@ export class ListingSearch implements OnInit {
       next: (categories) => this.categories.set(categories.filter((c) => c.active)),
       error: () => {}
     });
+    this.loadFeatured();
     this.search();
+  }
+
+  private loadFeatured(): void {
+    this.listingService.search().subscribe({
+      next: (listings) => {
+        const sorted = [...listings].sort(
+          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        );
+        this.featured.set(sorted.slice(0, 6));
+      },
+      error: () => {}
+    });
   }
 
   imageUrl(listing: ListingSearchDto): string | null {

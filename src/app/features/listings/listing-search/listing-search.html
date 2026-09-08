@@ -1,6 +1,27 @@
 <section class="search">
   <h1>Cerca oggetti</h1>
 
+  @if (featured().length > 0) {
+    <section class="featured">
+      <h2>In evidenza</h2>
+      <ul class="featured-strip">
+        @for (listing of featured(); track listing.id) {
+          <li class="featured-card">
+            @if (imageUrl(listing); as url) {
+              <img [src]="url" [alt]="listing.itemTitle" />
+            } @else {
+              <div class="no-image">Nessuna immagine</div>
+            }
+            <div class="featured-body">
+              <h3>{{ listing.itemTitle }}</h3>
+              <p class="category">{{ listing.categoryName }} · {{ listing.city }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
   <form class="filters" [formGroup]="form" (ngSubmit)="search()">
     <input type="text" formControlName="keyword" placeholder="Cerca per titolo…" />
 

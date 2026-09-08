@@ -78,7 +78,7 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2);
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
   cursor: grab;
@@ -121,7 +121,7 @@
   font: inherit;
   font-size: var(--font-size-sm);
   font-weight: 600;
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
   color: var(--color-text);
   transition: border-color var(--transition-fast);

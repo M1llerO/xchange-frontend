@@ -45,7 +45,7 @@ form {
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-sm);
   font: inherit;
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   min-height: 44px;
 }
 
@@ -108,7 +108,7 @@ form {
 }
 
 .btn-ghost {
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border-color: var(--color-neutral-200);
   color: var(--color-text);
 }

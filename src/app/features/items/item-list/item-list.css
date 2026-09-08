@@ -28,7 +28,7 @@
   align-items: end;
   padding: var(--space-3);
   margin-bottom: var(--space-4);
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
 }
@@ -51,7 +51,7 @@
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-sm);
   font: inherit;
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   min-height: 44px;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .btn-ghost {
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border-color: var(--color-neutral-200);
   color: var(--color-text);
 }
@@ -106,7 +106,7 @@
 }
 
 .btn-danger {
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border-color: var(--color-neutral-200);
   color: var(--color-danger);
 }
@@ -128,7 +128,7 @@
 .item-card {
   display: flex;
   flex-direction: column;
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
   overflow: hidden;
