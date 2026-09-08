@@ -1,27 +1,65 @@
-<form (submit)="onSubmit($event)">
+<section class="create-listing">
+  <a class="back-link" routerLink="/listings/mine">&larr; I miei annunci</a>
+  <h1>Pubblica un annuncio</h1>
 
-  <label>Città</label>
-  <input [formField]="myForm.city" />
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage() && items().length === 0) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (items().length === 0) {
+    <p class="hint">
+      Non hai oggetti disponibili da pubblicare. <a routerLink="/items/new">Aggiungine uno</a> prima di creare un annuncio.
+    </p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label class="field">
+        <span class="field-label">Oggetto da pubblicare *</span>
+        <select formControlName="itemId">
+          <option [ngValue]="null" disabled>Seleziona un oggetto</option>
+          @for (item of items(); track item.id) {
+            <option [ngValue]="item.id">{{ item.title }}</option>
+          }
+        </select>
+        @if (form.controls.itemId.touched && form.controls.itemId.invalid) {
+          <span class="field-error">Seleziona l'oggetto da mettere in cambio.</span>
+        }
+      </label>
 
-  <label>Categorie accettate</label>
-  @for (categoria of categories; track categoria.id) {
-    <div>
-      <input
-        type="checkbox"
-        (change)="toggleCategory(categoria.id)"
-      />
-      <label>{{ categoria.name }}</label>
-    </div>
+      <label class="field">
+        <span class="field-label">Città *</span>
+        <input type="text" formControlName="city" maxlength="120" placeholder="Es. Cagliari" />
+        @if (form.controls.city.touched && form.controls.city.invalid) {
+          <span class="field-error">Indica la città in cui ritirare l'oggetto.</span>
+        }
+      </label>
+
+      <div class="field">
+        <span class="field-label">Categorie accettate in cambio *</span>
+        <ul class="category-list">
+          @for (category of categories(); track category.id) {
+            <li [class.selected]="isCategorySelected(category.id)" (click)="toggleCategory(category.id)">
+              <input
+                type="checkbox"
+                [checked]="isCategorySelected(category.id)"
+                (click)="$event.stopPropagation()"
+                (change)="toggleCategory(category.id)"
+              />
+              <span>{{ category.name }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="submitting()">
+          {{ submitting() ? 'Pubblicazione…' : 'Pubblica annuncio' }}
+        </button>
+        <a class="btn-ghost" routerLink="/listings/mine">Annulla</a>
+      </div>
+    </form>
   }
-  
-<label>Oggetto da pubblicare</label>
-<select (change)="selectItem(+$any($event.target).value)">
-  <option value="">-- Seleziona --</option>
-  @for (item of items; track item.id) {
-    <option [value]="item.id">{{ item.title }}</option>
-  }
-</select>
-
-  <button type="submit">Pubblica</button>
-
-</form>
+</section>

@@ -1,0 +1,131 @@
+.create-listing {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.hint {
+  color: var(--color-neutral-600);
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field-label {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.field input,
+.field select {
+  padding: var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  min-height: 44px;
+}
+
+.field select option {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.field-error {
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+}
+
+.category-list li.selected {
+  border-color: var(--color-primary);
+  background: var(--color-neutral-100);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-neutral-0);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.btn-primary:disabled {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: var(--color-surface);
+  border-color: var(--color-neutral-200);
+  color: var(--color-text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+}
