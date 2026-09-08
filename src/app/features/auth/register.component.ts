@@ -33,7 +33,7 @@ export class RegisterComponent {
     const password = control.value;
     if (!password) return null;
 
-    const hasMinLength = password.length >= 8;
+    const hasMinLength = password.length >= 12;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
@@ -54,7 +54,7 @@ export class RegisterComponent {
   }
 
   hasMinLength(): boolean {
-    return (this.form.get('password')?.value || '').length >= 8;
+    return (this.form.get('password')?.value || '').length >= 12;
   }
 
   hasUpperCase(): boolean {
