@@ -1,10 +1,26 @@
-@for (elemento of listings; track elemento.id) {
-  <div>
-    <div>{{ elemento.city }}</div>
-    <div>Stato attuale: {{ elemento.status }}</div>
+<section class="my-listings">
+  <h1>I miei annunci</h1>
 
-    @if (elemento.status !== 'eliminato') {
-      <button (click)="cancelListing(elemento)">Elimina annuncio</button>
-    }
-  </div>
-}
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (listings.length === 0) {
+    <p class="hint">Non hai ancora pubblicato annunci.</p>
+  } @else {
+    <ul class="listing-list">
+      @for (elemento of listings; track elemento.id) {
+        <li class="listing-row">
+          <div class="listing-main">
+            <span class="city">{{ elemento.city }}</span>
+            <span class="status" [attr.data-status]="elemento.status">{{ statusLabels[elemento.status] }}</span>
+          </div>
+
+          @if (elemento.status !== 'eliminato') {
+            <button class="delete-btn" type="button" (click)="cancelListing(elemento)">Elimina annuncio</button>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

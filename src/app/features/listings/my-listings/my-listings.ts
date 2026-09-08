@@ -1,7 +1,7 @@
 
 import { ListingService } from '../../../services/listing';
 import { Listing } from '../../../models/listing.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 
 @Component({
   imports: [],
@@ -14,10 +14,26 @@ export class MyListings implements OnInit {
  constructor(private listingService: ListingService) {}
 
  listings: Listing[] = [];
+ loading = signal(true);
+ errorMessage = signal<string | null>(null);
+
+ statusLabels: Record<string, string> = {
+   attivo: 'Attivo',
+   in_trattativa: 'In trattativa',
+   scambiato: 'Scambiato',
+   eliminato: 'Eliminato'
+ };
 
   ngOnInit() {
-    this.listingService.getMine().subscribe((listings) => {
-      this.listings = listings;
+    this.listingService.getMine().subscribe({
+      next: (listings) => {
+        this.listings = listings;
+        this.loading.set(false);
+      },
+      error: () => {
+        this.errorMessage.set('Impossibile caricare i tuoi annunci.');
+        this.loading.set(false);
+      }
     });
   }
 
@@ -30,10 +46,3 @@ export class MyListings implements OnInit {
 }
 
 }
-
-
-
-  
-
-
-
