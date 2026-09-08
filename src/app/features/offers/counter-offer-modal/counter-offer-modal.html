@@ -1,0 +1,52 @@
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Fai una controproposta</h2>
+      <button class="close-btn" (click)="close()" aria-label="Chiudi">×</button>
+    </div>
+
+    @if (loading()) {
+      <p class="hint">Caricamento dei tuoi oggetti…</p>
+    } @else if (myItems().length === 0) {
+      <p class="hint">Non hai ancora oggetti da proporre.</p>
+    } @else {
+      <p class="section-label">Scegli gli oggetti da offrire</p>
+      <ul class="item-select-list">
+        @for (item of myItems(); track item.id) {
+          <li>
+            <label class="item-select-row">
+              <input
+                type="checkbox"
+                [checked]="isSelected(item.id)"
+                (change)="toggleItem(item.id)"
+              >
+              <span class="item-select-title">{{ item.title }}</span>
+              <span class="item-select-condition">{{ item.itemCondition }}</span>
+            </label>
+          </li>
+        }
+      </ul>
+
+      <label class="message-label">
+        Messaggio (opzionale)
+        <textarea
+          [ngModel]="message()"
+          (ngModelChange)="message.set($event)"
+          rows="3"
+          placeholder="Scrivi un messaggio per accompagnare la tua proposta…"
+        ></textarea>
+      </label>
+    }
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" (click)="close()">Annulla</button>
+      <button class="btn btn-primary" (click)="submit()" [disabled]="submitting() || loading()">
+        {{ submitting() ? 'Invio…' : 'Invia controproposta' }}
+      </button>
+    </div>
+  </div>
+</div>
