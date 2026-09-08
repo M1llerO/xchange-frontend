@@ -4,11 +4,12 @@ import { environment } from '../../environments/environment';
 import { buildParams } from '../core/http-params.util';
 import {
   CreateListingRequest,
-  ListingDto,
-  ListingSearchDto,
-  ListingSearchParams,
+  Listing,
   ListingStatus
 } from '../models/listing.model';
+
+type ListingSearchDto = Listing;
+type ListingSearchParams = Record<string, string | number | boolean | null | undefined>;
 
 @Injectable({ providedIn: 'root' })
 export class ListingService {
@@ -17,11 +18,11 @@ export class ListingService {
   constructor(private http: HttpClient) {}
 
   create(data: CreateListingRequest) {
-    return this.http.post<ListingDto>(this.baseUrl, data);
+    return this.http.post<Listing>(this.baseUrl, data);
   }
 
   getMine() {
-    return this.http.get<ListingDto[]>(`${this.baseUrl}/mine`);
+    return this.http.get<Listing[]>(`${this.baseUrl}/mine`);
   }
 
   search(params?: ListingSearchParams) {
@@ -29,6 +30,6 @@ export class ListingService {
   }
 
   updateStatus(id: number, status: ListingStatus) {
-    return this.http.patch<ListingDto>(`${this.baseUrl}/${id}/status`, { status });
+    return this.http.patch<Listing>(`${this.baseUrl}/${id}/status`, { status });
   }
 }

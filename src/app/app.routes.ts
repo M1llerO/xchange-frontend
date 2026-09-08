@@ -25,7 +25,22 @@ export const routes: Routes = [
       },
       {
         path: 'items',
-        loadComponent: () => import('./features/items/items.component').then(m => m.ItemsComponent),
+        loadComponent: () => import('./features/items/item-list/item-list').then(m => m.ItemList),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'items/new',
+        loadComponent: () => import('./features/items/item-form/item-form').then(m => m.ItemForm),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'items/:id/edit',
+        loadComponent: () => import('./features/items/item-form/item-form').then(m => m.ItemForm),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'items/:id/images',
+        loadComponent: () => import('./features/items/item-images/item-images').then(m => m.ItemImages),
         canActivate: [authGuard]
       },
       {

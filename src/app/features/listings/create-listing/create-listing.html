@@ -1,0 +1,27 @@
+<form (submit)="onSubmit($event)">
+
+  <label>Città</label>
+  <input [formField]="myForm.city" />
+
+  <label>Categorie accettate</label>
+  @for (categoria of categories; track categoria.id) {
+    <div>
+      <input
+        type="checkbox"
+        (change)="toggleCategory(categoria.id)"
+      />
+      <label>{{ categoria.name }}</label>
+    </div>
+  }
+  
+<label>Oggetto da pubblicare</label>
+<select (change)="selectItem(+$any($event.target).value)">
+  <option value="">-- Seleziona --</option>
+  @for (item of items; track item.id) {
+    <option [value]="item.id">{{ item.title }}</option>
+  }
+</select>
+
+  <button type="submit">Pubblica</button>
+
+</form>
