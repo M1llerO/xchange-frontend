@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { LayoutComponent } from './features/layout/layout.component';
 import { LoginComponent } from './features/auth/login.component';
 import { RegisterComponent } from './features/auth/register.component';
-import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role-guard';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -55,7 +55,7 @@ export const routes: Routes = [
       },
       {
         path: 'offers',
-        loadComponent: () => import('./features/offers/offers.component').then(m => m.OffersComponent),
+        loadComponent: () => import('./features/offers/my-offers/my-offers').then(m => m.MyOffers),
         canActivate: [authGuard]
       },
       {

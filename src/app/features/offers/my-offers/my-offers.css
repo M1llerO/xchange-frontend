@@ -1,0 +1,124 @@
+.offers-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.hint { color: var(--color-neutral-600); }
+.error { color: var(--color-danger); }
+
+.offer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.offer-card {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.offer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.offerer {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.status-badge {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.status-in_attesa { background: #FEF3C7; color: var(--color-warning); }
+.status-accettata { background: #DCFCE7; color: var(--color-success); }
+.status-rifiutata { background: #FEE2E2; color: var(--color-danger); }
+.status-annullata { background: var(--color-neutral-100); color: var(--color-neutral-600); }
+.status-controproposta { background: #EDE9FE; color: var(--color-primary); }
+
+.item-list {
+  list-style: none;
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.message {
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  color: var(--color-neutral-600);
+  margin: var(--space-2) 0;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-accept { background: var(--color-cta); color: var(--color-neutral-0); }
+.btn-accept:hover { background: var(--color-cta-dark); }
+
+.btn-reject { background: var(--color-neutral-0); border-color: var(--color-danger); color: var(--color-danger); }
+.btn-reject:hover { background: #FEE2E2; }
+
+.btn-ghost { background: var(--color-neutral-0); border-color: var(--color-primary); color: var(--color-primary); }
+.btn-ghost:hover { background: var(--color-bg); }

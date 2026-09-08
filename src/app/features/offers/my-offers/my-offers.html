@@ -1,0 +1,68 @@
+<section class="offers-page">
+  <h1>Le mie offerte</h1>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'received'" (click)="setTab('received')">
+      Ricevute
+    </button>
+    <button class="tab" [class.active]="activeTab() === 'sent'" (click)="setTab('sent')">
+      Inviate
+    </button>
+  </div>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (visibleOffers().length === 0) {
+    <p class="hint">Nessuna offerta {{ activeTab() === 'received' ? 'ricevuta' : 'inviata' }}.</p>
+  } @else {
+    <ul class="offer-list">
+      @for (offer of visibleOffers(); track offer.offerId) {
+        <li class="offer-card">
+          <div class="offer-header">
+            <span class="offerer">{{ offer.offererName }}</span>
+            <span class="status-badge" [class]="'status-' + offer.status">
+              {{ statusLabel(offer.status) }}
+            </span>
+          </div>
+
+          <ul class="item-list">
+            @for (item of offer.offeredItems; track item.id) {
+              <li class="item-row">
+                <span class="item-title">{{ item.title }}</span>
+                <span class="item-condition">{{ item.condition }}</span>
+              </li>
+            }
+          </ul>
+
+          @if (offer.message) {
+            <p class="message">"{{ offer.message }}"</p>
+          }
+
+          @if (activeTab() === 'received' && offer.status === 'in_attesa') {
+            <div class="actions">
+              <button class="btn btn-accept" (click)="approve(offer.offerId)">Accetta</button>
+              <button class="btn btn-reject" (click)="reject(offer.offerId)">Rifiuta</button>
+              <button class="btn btn-ghost" (click)="openCounterModal(offer.offerId)">Controproponi</button>
+            </div>
+          }
+
+          @if (activeTab() === 'sent' && offer.status === 'in_attesa') {
+            <div class="actions">
+              <button class="btn btn-reject" (click)="cancel(offer.offerId)">Annulla offerta</button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  }
+
+  @if (counterOfferTargetId(); as targetId) {
+    <app-counter-offer-modal
+      [offerId]="targetId"
+      (closed)="closeCounterModal()"
+      (submitted)="onCounterSubmitted()"
+    ></app-counter-offer-modal>
+  }
+</section>
