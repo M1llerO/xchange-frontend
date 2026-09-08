@@ -104,7 +104,7 @@ export class ItemForm implements OnInit {
           this.router.navigate(['/items']);
         } else {
           // appena creato: si prosegue naturalmente con l'aggiunta delle foto
-          this.router.navigate(['/items', item.id, 'images']);
+          this.router.navigate(['/items', item.id, 'images'], { queryParams: { created: 1 } });
         }
       },
       error: (err) => {

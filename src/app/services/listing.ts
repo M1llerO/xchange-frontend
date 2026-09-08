@@ -5,6 +5,7 @@ import { buildParams } from '../core/http-params.util';
 import {
   CreateListingRequest,
   Listing,
+  ListingDetailDto,
   ListingSearchDto,
   ListingStatus
 } from '../models/listing.model';
@@ -23,6 +24,10 @@ export class ListingService {
 
   getMine() {
     return this.http.get<Listing[]>(`${this.baseUrl}/mine`);
+  }
+
+  getById(id: number) {
+    return this.http.get<ListingDetailDto>(`${this.baseUrl}/${id}`);
   }
 
   search(params?: ListingSearchParams) {

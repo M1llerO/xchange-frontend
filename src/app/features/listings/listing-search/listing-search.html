@@ -49,21 +49,23 @@
     <ul class="listing-grid">
       @for (listing of results(); track listing.id) {
         <li class="listing-card">
-          @if (imageUrl(listing); as url) {
-            <img [src]="url" [alt]="listing.itemTitle" />
-          } @else {
-            <div class="no-image">Nessuna immagine</div>
-          }
-          <div class="listing-body">
-            <h2>{{ listing.itemTitle }}</h2>
-            <p class="category">{{ listing.categoryName }} · {{ listing.city }}</p>
-            @if (listing.itemEstimatedValue !== null) {
-              <p class="value">{{ listing.itemEstimatedValue | number: '1.0-2' }} €</p>
+          <a class="listing-link" [routerLink]="['/listings', listing.id]">
+            @if (imageUrl(listing); as url) {
+              <img [src]="url" [alt]="listing.itemTitle" />
+            } @else {
+              <div class="no-image">Nessuna immagine</div>
             }
-            <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ listingId: listing.id }">
-              Segnala annuncio
-            </a>
-          </div>
+            <div class="listing-body">
+              <h2>{{ listing.itemTitle }}</h2>
+              <p class="category">{{ listing.categoryName }} · {{ listing.city }}</p>
+              @if (listing.itemEstimatedValue !== null) {
+                <p class="value">{{ listing.itemEstimatedValue | number: '1.0-2' }} €</p>
+              }
+            </div>
+          </a>
+          <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ listingId: listing.id }">
+            Segnala annuncio
+          </a>
         </li>
       }
     </ul>

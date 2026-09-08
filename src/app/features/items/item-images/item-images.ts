@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ItemService } from '../../../services/item';
 import { ItemImageService } from '../../../services/item-image';
 import { ItemImageDto } from '../../../models/item.model';
@@ -19,6 +19,7 @@ const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 })
 export class ItemImages implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private itemService = inject(ItemService);
   private imageService = inject(ItemImageService);
 
@@ -26,6 +27,7 @@ export class ItemImages implements OnInit {
   readonly acceptAttr = ACCEPTED_TYPES.join(',');
   readonly resolveAssetUrl = resolveAssetUrl;
   readonly itemId = Number(this.route.snapshot.paramMap.get('id'));
+  readonly justCreated = this.route.snapshot.queryParamMap.get('created') === '1';
 
   itemTitle = signal('');
   images = signal<ItemImageDto[]>([]);
@@ -33,7 +35,9 @@ export class ItemImages implements OnInit {
   uploading = signal(false);
   savingOrder = signal(false);
   errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
   dragIndex = signal<number | null>(null);
+  private successTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
     this.itemService.getById(this.itemId).subscribe({
@@ -76,12 +80,23 @@ export class ItemImages implements OnInit {
       next: (image) => {
         this.images.update((list) => [...list, image]);
         this.uploading.set(false);
+        this.showSuccess('Immagine caricata con successo.');
       },
       error: (err) => {
         this.errorMessage.set(extractErrorMessage(err, 'Caricamento non riuscito.'));
         this.uploading.set(false);
       }
     });
+  }
+
+  confirmDone(): void {
+    this.router.navigate(['/items']);
+  }
+
+  private showSuccess(message: string): void {
+    this.successMessage.set(message);
+    clearTimeout(this.successTimer);
+    this.successTimer = setTimeout(() => this.successMessage.set(null), 3000);
   }
 
   remove(image: ItemImageDto): void {

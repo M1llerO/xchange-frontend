@@ -11,8 +11,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401) {
-        authService.logout();
-        router.navigate(['/login']);
+        // Un 401 su una chiamata pubblica (nessun token inviato) non deve
+        // buttare fuori un visitatore non loggato dalla pagina che sta guardando:
+        // deve solo far fallire quella chiamata. Il redirect al login ha senso
+        // solo se la sessione era attiva ed e' scaduta/non valida.
+        const hadToken = !!authService.getToken();
+        authService.logoutSync();
+        if (hadToken) {
+          router.navigate(['/login']);
+        }
       }
       if (err.status === 403) {
         router.navigate(['/forbidden']);

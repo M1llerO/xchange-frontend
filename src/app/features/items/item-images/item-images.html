@@ -5,6 +5,10 @@
   @if (loading()) {
     <p class="hint">Caricamento…</p>
   } @else {
+    @if (justCreated) {
+      <p class="success">Oggetto creato con successo. Aggiungi qualche foto per renderlo più riconoscibile, poi conferma.</p>
+    }
+
     <div class="uploader">
       <label class="btn-primary" [class.disabled]="uploading() || images().length >= maxImages">
         {{ uploading() ? 'Caricamento…' : 'Aggiungi immagine' }}
@@ -23,6 +27,10 @@
     </div>
 
     <p class="upload-help">Formati ammessi: JPG, PNG, WebP · massimo 5 MB per file.</p>
+
+    @if (successMessage()) {
+      <p class="success" role="status">✓ {{ successMessage() }}</p>
+    }
 
     @if (errorMessage()) {
       <p class="error">{{ errorMessage() }}</p>
@@ -80,5 +88,11 @@
         }
       </ul>
     }
+
+    <div class="confirm-bar">
+      <button type="button" class="btn-primary" (click)="confirmDone()">
+        Fine, ho caricato le foto
+      </button>
+    </div>
   }
 </section>

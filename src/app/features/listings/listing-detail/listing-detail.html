@@ -1,0 +1,104 @@
+<section class="detail">
+  <a class="back-link" routerLink="/listings">&larr; Torna alla ricerca</a>
+
+  @if (loading()) {
+    <p class="hint">Caricamento…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (listing(); as data) {
+    <div class="layout">
+      <div class="gallery">
+        @if (data.images.length > 0) {
+          <img class="main-image" [src]="imageUrl(data.images[0].url)" [alt]="data.itemTitle" />
+          @if (data.images.length > 1) {
+            <ul class="thumbs">
+              @for (image of data.images; track image.id) {
+                <li><img [src]="imageUrl(image.url)" [alt]="data.itemTitle" /></li>
+              }
+            </ul>
+          }
+        } @else {
+          <div class="no-image">Nessuna immagine</div>
+        }
+      </div>
+
+      <div class="info">
+        <span class="status" [class]="'status-' + data.status">{{ statusLabels[data.status] }}</span>
+        <h1>{{ data.itemTitle }}</h1>
+        <p class="meta">{{ data.categoryName }} · {{ data.city }}</p>
+
+        @if (data.itemEstimatedValue !== null) {
+          <p class="value">{{ data.itemEstimatedValue | number: '1.0-2' }} €</p>
+        }
+
+        <p class="condition">Condizione: {{ conditionLabels[data.itemCondition] }}</p>
+
+        <p class="description">{{ data.itemDescription }}</p>
+
+        @if (acceptedCategoryNames().length > 0) {
+          <div class="accepted">
+            <h2>Cambi accettati</h2>
+            <ul class="chips">
+              @for (name of acceptedCategoryNames(); track name) {
+                <li>{{ name }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (owner(); as ownerProfile) {
+          <a class="owner" [routerLink]="['/profile', ownerProfile.userId]">
+            Pubblicato da {{ ownerProfile.username }}
+            @if (ownerProfile.averageRating !== null) {
+              <span class="rating">★ {{ ownerProfile.averageRating | number: '1.1-1' }}</span>
+            }
+          </a>
+        }
+
+        <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ listingId: data.id }">
+          Segnala annuncio
+        </a>
+      </div>
+    </div>
+
+    @if (isOwner()) {
+      <p class="hint owner-hint">Questo è un tuo annuncio. Gestiscilo dalla pagina <a routerLink="/listings/mine">I miei annunci</a>.</p>
+    } @else if (!isLoggedIn()) {
+      <p class="hint">Effettua l'<a routerLink="/login">accesso</a> per proporre uno scambio.</p>
+    } @else if (data.status !== 'attivo') {
+      <p class="hint">Questo annuncio non è più disponibile per nuove offerte.</p>
+    } @else {
+      <section class="offer-form">
+        <h2>Proponi uno scambio</h2>
+
+        @if (offerSuccess()) {
+          <p class="success">Offerta inviata! La trovi tra i tuoi <a routerLink="/offers">scambi</a>.</p>
+        } @else {
+          @if (myItems().length === 0) {
+            <p class="hint">Non hai oggetti disponibili da proporre. <a routerLink="/items/new">Aggiungine uno</a>.</p>
+          } @else {
+            <p class="hint">Seleziona uno o più oggetti da offrire in cambio:</p>
+            <ul class="my-items">
+              @for (myItem of myItems(); track myItem.id) {
+                <li [class.selected]="isSelected(myItem.id)" (click)="toggleSelectedItem(myItem.id)">
+                  <input type="checkbox" [checked]="isSelected(myItem.id)" (click)="$event.stopPropagation()" (change)="toggleSelectedItem(myItem.id)" />
+                  <span>{{ myItem.title }}</span>
+                </li>
+              }
+            </ul>
+
+            <form [formGroup]="offerForm" (ngSubmit)="submitOffer()">
+              <textarea formControlName="message" placeholder="Messaggio (opzionale)" rows="3"></textarea>
+              @if (offerError()) {
+                <p class="error">{{ offerError() }}</p>
+              }
+              <button type="submit" [disabled]="offerSubmitting()">
+                {{ offerSubmitting() ? 'Invio…' : 'Invia offerta' }}
+              </button>
+            </form>
+          }
+        }
+      </section>
+    }
+  }
+</section>
