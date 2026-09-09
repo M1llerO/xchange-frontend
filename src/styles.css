@@ -727,8 +727,7 @@ button, input, textarea, select {
 .hamburger.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
 
 .main-content {
-  max-width: 1200px;
-  margin: var(--spacing-xl) auto;
+  margin: var(--spacing-xl) 0;
   padding: 0 var(--spacing-md);
 }
 
