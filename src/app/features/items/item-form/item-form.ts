@@ -24,8 +24,8 @@ export class ItemForm implements OnInit {
   readonly conditionOptions = CONDITION_OPTIONS;
 
   private readonly idParam = this.route.snapshot.paramMap.get('id');
-  readonly itemId = this.idParam ? Number(this.idParam) : null;
-  readonly isEdit = this.itemId !== null;
+  readonly isEdit = this.idParam !== null;
+  itemId = signal<number | null>(this.idParam ? Number(this.idParam) : null);
 
   categories = signal<Category[]>([]);
   loading = signal(this.isEdit);
@@ -50,22 +50,29 @@ export class ItemForm implements OnInit {
     });
 
     if (this.isEdit) {
-      this.itemService.getById(this.itemId!).subscribe({
-        next: (item) => {
-          this.form.patchValue({
-            categoryId: item.categoryId,
-            title: item.title,
-            description: item.description,
-            estimatedValue: item.estimatedValue,
-            itemCondition: item.itemCondition,
-            archived: item.archived
-          });
-          this.loading.set(false);
-        },
-        error: (err) => {
-          this.errorMessage.set(extractErrorMessage(err, "Impossibile caricare l'oggetto."));
-          this.loading.set(false);
-        }
+      this.route.paramMap.subscribe((params) => {
+        const itemId = Number(params.get('id'));
+        this.itemId.set(itemId);
+        this.errorMessage.set(null);
+        this.loading.set(true);
+
+        this.itemService.getById(itemId).subscribe({
+          next: (item) => {
+            this.form.patchValue({
+              categoryId: item.categoryId,
+              title: item.title,
+              description: item.description,
+              estimatedValue: item.estimatedValue,
+              itemCondition: item.itemCondition,
+              archived: item.archived
+            });
+            this.loading.set(false);
+          },
+          error: (err) => {
+            this.errorMessage.set(extractErrorMessage(err, "Impossibile caricare l'oggetto."));
+            this.loading.set(false);
+          }
+        });
       });
     }
   }
@@ -91,7 +98,7 @@ export class ItemForm implements OnInit {
     }
 
     const request$ = this.isEdit
-      ? this.itemService.update(this.itemId!, {
+      ? this.itemService.update(this.itemId()!, {
           ...payload,
           archived: raw.archived
         } as UpdateItemRequest)

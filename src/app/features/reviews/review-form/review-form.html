@@ -1,6 +1,6 @@
 <section class="review-form">
   <a class="back-link" routerLink="/reviews">&larr; Scambi da recensire</a>
-  <h1>Recensisci scambio #{{ exchangeId }}</h1>
+  <h1>Recensisci scambio #{{ exchangeId() }}</h1>
 
   @if (submitted(); as review) {
     <div class="success">

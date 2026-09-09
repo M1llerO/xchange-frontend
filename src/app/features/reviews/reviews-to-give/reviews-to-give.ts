@@ -17,7 +17,9 @@ export class ReviewsToGive implements OnInit {
   loading = signal(true);
   errorMessage = signal<string | null>(null);
 
-  completedExchanges = computed(() => this.exchanges().filter((e) => e.status === 'completato'));
+  completedExchanges = computed(() =>
+    this.exchanges().filter((e) => e.status === 'completato' && !e.reviewedByMe)
+  );
 
   ngOnInit(): void {
     this.exchangeService.getMine().subscribe({

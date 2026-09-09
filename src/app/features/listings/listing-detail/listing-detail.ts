@@ -6,6 +6,7 @@ import { ListingService } from '../../../services/listing';
 import { ItemService } from '../../../services/item';
 import { CategoryService, Category } from '../../../services/category';
 import { OfferService } from '../../../services/offer';
+import { MessageService } from '../../../services/message';
 import { UserService } from '../../../services/user';
 import { AuthService } from '../../../services/auth';
 import { ListingDetailDto } from '../../../models/listing.model';
@@ -34,6 +35,7 @@ export class ListingDetail implements OnInit {
   private itemService = inject(ItemService);
   private categoryService = inject(CategoryService);
   private offerService = inject(OfferService);
+  private messageService = inject(MessageService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
@@ -53,6 +55,8 @@ export class ListingDetail implements OnInit {
   offerSubmitting = signal(false);
   offerSuccess = signal(false);
   offerError = signal<string | null>(null);
+  createdOfferId = signal<number | null>(null);
+  chatMessageFailed = signal(false);
 
   offerForm = this.fb.nonNullable.group({
     message: ['']
@@ -90,6 +94,8 @@ export class ListingDetail implements OnInit {
     this.owner.set(null);
     this.offerSuccess.set(false);
     this.offerError.set(null);
+    this.createdOfferId.set(null);
+    this.chatMessageFailed.set(false);
     this.selectedItemIds.set([]);
 
     this.categoryService.getAll().subscribe({
@@ -149,16 +155,21 @@ export class ListingDetail implements OnInit {
 
     this.offerSubmitting.set(true);
     this.offerError.set(null);
+    this.chatMessageFailed.set(false);
+
+    const message = this.offerForm.getRawValue().message || null;
 
     this.offerService
-      .makeOffer(listing.id, {
-        itemIds,
-        message: this.offerForm.getRawValue().message || null
-      })
+      .makeOffer(listing.id, { itemIds, message })
       .subscribe({
-        next: () => {
+        next: (offer) => {
+          this.messageService
+            .send(offer.offerId, { body: message ?? 'Ho inviato una proposta di scambio per questo annuncio.' })
+            .subscribe({ error: () => this.chatMessageFailed.set(true) });
+
           this.offerSubmitting.set(false);
           this.offerSuccess.set(true);
+          this.createdOfferId.set(offer.offerId);
           this.selectedItemIds.set([]);
           this.offerForm.reset({ message: '' });
         },

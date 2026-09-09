@@ -1,6 +1,6 @@
 <section class="thread">
   <a class="back-link" routerLink="/messages">&larr; Tutti i messaggi</a>
-  <h1>{{ otherParticipantName() ?? ('Trattativa #' + offerId) }}</h1>
+  <h1>{{ otherParticipantName() ?? ('Trattativa #' + offerId()) }}</h1>
 
   @if (loading()) {
     <p class="hint">Caricamento…</p>

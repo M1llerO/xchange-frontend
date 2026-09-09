@@ -19,7 +19,7 @@ export class MessageThread implements OnInit {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
-  offerId = Number(this.route.snapshot.paramMap.get('offerId'));
+  offerId = signal(0);
   currentUserId = this.authService.getUserId();
 
   messages = signal<MessageDto[]>([]);
@@ -32,15 +32,23 @@ export class MessageThread implements OnInit {
   });
 
   ngOnInit(): void {
-    this.messageService.getThread(this.offerId).subscribe({
-      next: (messages) => {
-        this.messages.set(messages);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('Impossibile caricare la conversazione.');
-        this.loading.set(false);
-      }
+    this.route.paramMap.subscribe((params) => {
+      const offerId = Number(params.get('offerId'));
+      this.offerId.set(offerId);
+      this.messages.set([]);
+      this.errorMessage.set(null);
+      this.loading.set(true);
+
+      this.messageService.getThread(offerId).subscribe({
+        next: (messages) => {
+          this.messages.set(messages);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.errorMessage.set('Impossibile caricare la conversazione.');
+          this.loading.set(false);
+        }
+      });
     });
   }
 
@@ -59,7 +67,7 @@ export class MessageThread implements OnInit {
     }
     this.sending.set(true);
     this.errorMessage.set(null);
-    this.messageService.send(this.offerId, this.form.getRawValue()).subscribe({
+    this.messageService.send(this.offerId(), this.form.getRawValue()).subscribe({
       next: (message) => {
         this.messages.update((list) => [...list, message]);
         this.form.reset({ body: '' });

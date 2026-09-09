@@ -36,6 +36,8 @@ export interface ListingSearchDto {
   categoryId: number;
   categoryName: string;
   primaryImageUrl: string | null;
+  acceptedCategoryIds?: number[];
+  acceptedCategoryNames?: string[];
 }
 
 export interface ListingDetailDto {

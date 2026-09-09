@@ -1,6 +1,6 @@
 <section class="item-images">
   <a class="back-link" routerLink="/items">&larr; I miei oggetti</a>
-  <h1>Immagini — {{ itemTitle() || 'oggetto #' + itemId }}</h1>
+  <h1>Immagini — {{ itemTitle() || 'oggetto #' + itemId() }}</h1>
 
   @if (loading()) {
     <p class="hint">Caricamento…</p>

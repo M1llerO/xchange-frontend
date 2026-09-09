@@ -23,27 +23,33 @@ export class ProfileComponent implements OnInit {
   isOwnProfile = signal(true);
 
   ngOnInit(): void {
-    const paramId = this.route.snapshot.paramMap.get('id');
-    const currentUserId = this.authService.getUserId();
-    const userId = paramId ? Number(paramId) : currentUserId;
+    this.route.paramMap.subscribe((params) => {
+      const paramId = params.get('id');
+      const currentUserId = this.authService.getUserId();
+      const userId = paramId ? Number(paramId) : currentUserId;
 
-    if (userId === null) {
-      this.errorMessage.set('Utente non identificato.');
-      this.loading.set(false);
-      return;
-    }
+      this.profile.set(null);
+      this.errorMessage.set(null);
+      this.loading.set(true);
 
-    this.isOwnProfile.set(userId === currentUserId);
-
-    this.userService.getProfile(userId).subscribe({
-      next: (profile) => {
-        this.profile.set(profile);
+      if (userId === null) {
+        this.errorMessage.set('Utente non identificato.');
         this.loading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('Impossibile caricare il profilo.');
-        this.loading.set(false);
+        return;
       }
+
+      this.isOwnProfile.set(userId === currentUserId);
+
+      this.userService.getProfile(userId).subscribe({
+        next: (profile) => {
+          this.profile.set(profile);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.errorMessage.set('Impossibile caricare il profilo.');
+          this.loading.set(false);
+        }
+      });
     });
   }
 }

@@ -17,6 +17,8 @@ export interface OfferDto {
   offeredItems: OfferedItemDto[];
   message: string | null;
   status: OfferStatus;
+  createdById: number;
+  parentOfferId: number | null;
 }
 
 export interface MakeOfferRequest {

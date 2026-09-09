@@ -22,8 +22,15 @@
         <li class="offer-card">
           <div class="offer-header">
             <span class="offerer">{{ offer.offererName }}</span>
-            <span class="status-badge" [class]="'status-' + offer.status">
-              {{ statusLabel(offer.status) }}
+            <span class="badges">
+              <span class="status-badge" [class]="'status-' + offer.status">
+                {{ statusLabel(offer.status) }}
+              </span>
+              @if (awaitingMyResponse(offer)) {
+                <span class="turn-badge turn-mine">Tocca a te rispondere</span>
+              } @else if (canCancel(offer)) {
+                <span class="turn-badge turn-theirs">In attesa della loro risposta</span>
+              }
             </span>
           </div>
 
@@ -40,15 +47,13 @@
             <p class="message">"{{ offer.message }}"</p>
           }
 
-          @if (activeTab() === 'received' && offer.status === 'in_attesa') {
+          @if (awaitingMyResponse(offer)) {
             <div class="actions">
               <button class="btn btn-accept" (click)="approve(offer.offerId)">Accetta</button>
               <button class="btn btn-reject" (click)="reject(offer.offerId)">Rifiuta</button>
               <button class="btn btn-ghost" (click)="openCounterModal(offer.offerId)">Controproponi</button>
             </div>
-          }
-
-          @if (activeTab() === 'sent' && offer.status === 'in_attesa') {
+          } @else if (canCancel(offer)) {
             <div class="actions">
               <button class="btn btn-reject" (click)="cancel(offer.offerId)">Annulla offerta</button>
             </div>

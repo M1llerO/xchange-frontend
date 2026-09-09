@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ListingService } from '../../../services/listing';
 import { CategoryService, Category } from '../../../services/category';
+import { AuthService } from '../../../services/auth';
 import { environment } from '../../../../environments/environment';
 import { ListingSearchDto } from '../../../models/listing.model';
 
@@ -16,6 +17,7 @@ import { ListingSearchDto } from '../../../models/listing.model';
 export class ListingSearch implements OnInit {
   private listingService = inject(ListingService);
   private categoryService = inject(CategoryService);
+  protected authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   private filesBaseUrl = environment.apiUrl.replace(/\/api\/?$/, '');
@@ -38,27 +40,14 @@ export class ListingSearch implements OnInit {
       next: (categories) => this.categories.set(categories.filter((c) => c.active)),
       error: () => {}
     });
-    this.loadFeatured();
-    this.search();
-  }
-
-  private loadFeatured(): void {
-    this.listingService.search().subscribe({
-      next: (listings) => {
-        const sorted = [...listings].sort(
-          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-        );
-        this.featured.set(sorted.slice(0, 6));
-      },
-      error: () => {}
-    });
+    this.search(true);
   }
 
   imageUrl(listing: ListingSearchDto): string | null {
     return listing.primaryImageUrl ? `${this.filesBaseUrl}${listing.primaryImageUrl}` : null;
   }
 
-  search(): void {
+  search(isInitialLoad = false): void {
     this.loading.set(true);
     this.errorMessage.set(null);
     const { keyword, categoryId, minPrice, maxPrice } = this.form.getRawValue();
@@ -72,6 +61,13 @@ export class ListingSearch implements OnInit {
       .subscribe({
         next: (listings) => {
           this.results.set(listings);
+          if (isInitialLoad) {
+            // il primo caricamento (senza filtri) alimenta anche la striscia "in evidenza"
+            const sorted = [...listings].sort(
+              (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+            );
+            this.featured.set(sorted.slice(0, 6));
+          }
           this.loading.set(false);
         },
         error: () => {

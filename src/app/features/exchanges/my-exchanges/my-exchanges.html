@@ -47,7 +47,11 @@
           }
 
           @if (exchange.status === 'completato') {
-            <a class="review-link" [routerLink]="['/reviews/new', exchange.id]">Lascia una recensione</a>
+            @if (exchange.reviewedByMe) {
+              <span class="reviewed-hint">Hai già recensito questo scambio.</span>
+            } @else {
+              <a class="review-link" [routerLink]="['/reviews/new', exchange.id]">Lascia una recensione</a>
+            }
           }
         </li>
       }

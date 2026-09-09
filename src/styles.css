@@ -410,6 +410,15 @@ button, input, textarea, select {
   margin-top: var(--spacing-md);
 }
 
+.success-message {
+  background-color: color-mix(in srgb, var(--success) 15%, var(--color-bg));
+  color: var(--success);
+  border: 1px solid var(--success);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-md);
+}
+
 /* ---------------------------------------------------------------------
    8. Auth pages (login / register)
    --------------------------------------------------------------------- */

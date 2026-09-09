@@ -21,7 +21,7 @@ export class ReviewForm implements OnInit {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
-  exchangeId = Number(this.route.snapshot.paramMap.get('exchangeId'));
+  exchangeId = signal(0);
   ratings = [1, 2, 3, 4, 5];
 
   submitting = signal(false);
@@ -35,12 +35,20 @@ export class ReviewForm implements OnInit {
   });
 
   ngOnInit(): void {
-    this.exchangeService.getById(this.exchangeId).subscribe({
-      next: (exchange) => {
-        const myId = this.authService.getUserId();
-        this.recipientId.set(exchange.ownerId === myId ? exchange.offererId : exchange.ownerId);
-      },
-      error: () => {}
+    this.route.paramMap.subscribe((params) => {
+      const exchangeId = Number(params.get('exchangeId'));
+      this.exchangeId.set(exchangeId);
+      this.recipientId.set(null);
+      this.submitted.set(null);
+      this.form.reset({ rating: 0, comment: '' });
+
+      this.exchangeService.getById(exchangeId).subscribe({
+        next: (exchange) => {
+          const myId = this.authService.getUserId();
+          this.recipientId.set(exchange.ownerId === myId ? exchange.offererId : exchange.ownerId);
+        },
+        error: () => {}
+      });
     });
   }
 
@@ -52,7 +60,7 @@ export class ReviewForm implements OnInit {
     this.errorMessage.set(null);
     const { rating, comment } = this.form.getRawValue();
     this.reviewService
-      .create({ exchangeId: this.exchangeId, rating, comment: comment || null })
+      .create({ exchangeId: this.exchangeId(), rating, comment: comment || null })
       .subscribe({
         next: (review) => {
           this.submitted.set(review);

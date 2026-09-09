@@ -1,6 +1,7 @@
 
 import { ListingService } from '../../../services/listing';
 import { Listing } from '../../../models/listing.model';
+import { extractErrorMessage } from '../../../core/api-error.util';
 import { Component, OnInit, signal } from '@angular/core';
 
 @Component({
@@ -38,10 +39,14 @@ export class MyListings implements OnInit {
   }
 
   cancelListing(listing: Listing) {
-  this.listingService.updateStatus(listing.id, 'eliminato').subscribe(() => {
-    this.listings = this.listings.map(l =>
-      l.id === listing.id ? { ...l, status: 'eliminato' } : l
-    );
+  this.errorMessage.set(null);
+  this.listingService.updateStatus(listing.id, 'eliminato').subscribe({
+    next: () => {
+      this.listings = this.listings.map(l =>
+        l.id === listing.id ? { ...l, status: 'eliminato' } : l
+      );
+    },
+    error: (err) => this.errorMessage.set(extractErrorMessage(err, "Impossibile eliminare l'annuncio."))
   });
 }
 

@@ -11,4 +11,5 @@ export interface ExchangeDto {
   offererConfirmedAt: string | null;
   completedAt: string | null;
   createdAt: string;
+  reviewedByMe: boolean;
 }

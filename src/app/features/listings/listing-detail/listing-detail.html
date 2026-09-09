@@ -72,7 +72,15 @@
         <h2>Proponi uno scambio</h2>
 
         @if (offerSuccess()) {
-          <p class="success">Offerta inviata! La trovi tra i tuoi <a routerLink="/offers">scambi</a>.</p>
+          <p class="success">
+            Offerta inviata! La trovi tra i tuoi <a routerLink="/offers">scambi</a>
+            @if (createdOfferId() !== null) {
+              oppure <a [routerLink]="['/messages', createdOfferId()]">apri la conversazione</a>.
+            }
+          </p>
+          @if (chatMessageFailed()) {
+            <p class="hint">Non è stato possibile inviare il messaggio iniziale: apri la conversazione e scrivi tu il primo messaggio.</p>
+          }
         } @else {
           @if (myItems().length === 0) {
             <p class="hint">Non hai oggetti disponibili da proporre. <a routerLink="/items/new">Aggiungine uno</a>.</p>

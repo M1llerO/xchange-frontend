@@ -26,7 +26,7 @@ export class ItemImages implements OnInit {
   readonly maxImages = MAX_IMAGES;
   readonly acceptAttr = ACCEPTED_TYPES.join(',');
   readonly resolveAssetUrl = resolveAssetUrl;
-  readonly itemId = Number(this.route.snapshot.paramMap.get('id'));
+  itemId = signal(0);
   readonly justCreated = this.route.snapshot.queryParamMap.get('created') === '1';
 
   itemTitle = signal('');
@@ -40,16 +40,25 @@ export class ItemImages implements OnInit {
   private successTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
-    this.itemService.getById(this.itemId).subscribe({
-      next: (item) => {
-        this.itemTitle.set(item.title);
-        this.images.set(this.sortByOrder(item.images));
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.errorMessage.set(extractErrorMessage(err, "Impossibile caricare l'oggetto."));
-        this.loading.set(false);
-      }
+    this.route.paramMap.subscribe((params) => {
+      const itemId = Number(params.get('id'));
+      this.itemId.set(itemId);
+      this.itemTitle.set('');
+      this.images.set([]);
+      this.errorMessage.set(null);
+      this.loading.set(true);
+
+      this.itemService.getById(itemId).subscribe({
+        next: (item) => {
+          this.itemTitle.set(item.title);
+          this.images.set(this.sortByOrder(item.images));
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.errorMessage.set(extractErrorMessage(err, "Impossibile caricare l'oggetto."));
+          this.loading.set(false);
+        }
+      });
     });
   }
 
@@ -76,7 +85,7 @@ export class ItemImages implements OnInit {
 
     this.uploading.set(true);
     this.errorMessage.set(null);
-    this.imageService.upload(this.itemId, file).subscribe({
+    this.imageService.upload(this.itemId(), file).subscribe({
       next: (image) => {
         this.images.update((list) => [...list, image]);
         this.uploading.set(false);
@@ -101,7 +110,7 @@ export class ItemImages implements OnInit {
 
   remove(image: ItemImageDto): void {
     this.errorMessage.set(null);
-    this.imageService.remove(this.itemId, image.id).subscribe({
+    this.imageService.remove(this.itemId(), image.id).subscribe({
       next: () => this.reloadImages(),
       error: (err) =>
         this.errorMessage.set(extractErrorMessage(err, "Impossibile eliminare l'immagine."))
@@ -168,7 +177,7 @@ export class ItemImages implements OnInit {
     this.savingOrder.set(true);
     this.errorMessage.set(null);
     const ids = this.images().map((image) => image.id);
-    this.imageService.reorder(this.itemId, ids).subscribe({
+    this.imageService.reorder(this.itemId(), ids).subscribe({
       next: (updated) => {
         this.images.set(this.sortByOrder(updated));
         this.savingOrder.set(false);
@@ -182,7 +191,7 @@ export class ItemImages implements OnInit {
   }
 
   private reloadImages(): void {
-    this.imageService.list(this.itemId).subscribe({
+    this.imageService.list(this.itemId()).subscribe({
       next: (images) => this.images.set(this.sortByOrder(images)),
       error: () => {
         /* la lista a schermo resta quella corrente */

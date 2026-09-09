@@ -121,3 +121,8 @@
   font-weight: 600;
   color: var(--color-cta-dark);
 }
+
+.reviewed-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}

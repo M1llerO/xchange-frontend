@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -15,10 +15,12 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   form: FormGroup;
   loading = signal(false);
   errorMessage = signal('');
+  successMessage = signal(this.route.snapshot.queryParamMap.get('message') ?? '');
 
   constructor() {
     this.form = this.fb.group({

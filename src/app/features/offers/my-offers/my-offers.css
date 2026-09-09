@@ -41,7 +41,7 @@
 }
 
 .offer-card {
-  background: var(--color-neutral-0);
+  background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
   padding: var(--space-3);
@@ -51,7 +51,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   margin-bottom: var(--space-2);
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .offerer {
@@ -74,6 +82,16 @@
 .status-rifiutata { background: #FEE2E2; color: var(--color-danger); }
 .status-annullata { background: var(--color-neutral-100); color: var(--color-neutral-600); }
 .status-controproposta { background: #EDE9FE; color: var(--color-primary); }
+
+.turn-badge {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.turn-mine { background: var(--color-primary); color: var(--color-neutral-0); }
+.turn-theirs { background: var(--color-neutral-100); color: var(--color-neutral-600); }
 
 .item-list {
   list-style: none;
@@ -117,8 +135,8 @@
 .btn-accept { background: var(--color-cta); color: var(--color-neutral-0); }
 .btn-accept:hover { background: var(--color-cta-dark); }
 
-.btn-reject { background: var(--color-neutral-0); border-color: var(--color-danger); color: var(--color-danger); }
-.btn-reject:hover { background: #FEE2E2; }
+.btn-reject { background: transparent; border-color: var(--color-danger); color: var(--color-danger); }
+.btn-reject:hover { background: color-mix(in srgb, var(--color-danger) 15%, transparent); }
 
-.btn-ghost { background: var(--color-neutral-0); border-color: var(--color-primary); color: var(--color-primary); }
-.btn-ghost:hover { background: var(--color-bg); }
+.btn-ghost { background: transparent; border-color: var(--color-primary); color: var(--color-primary); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-primary) 15%, transparent); }

@@ -1,6 +1,11 @@
 <div class="auth-container">
   <div class="auth-card">
     <h1>Login</h1>
+
+    <div *ngIf="successMessage()" class="success-message">
+      {{ successMessage() }}
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="username">Username:</label>

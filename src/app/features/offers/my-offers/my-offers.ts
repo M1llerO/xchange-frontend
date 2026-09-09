@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OfferService } from '../../../services/offer';
+import { AuthService } from '../../../services/auth';
 import { OfferDto } from '../../../models/offer.model';
 import { CounterOfferModal } from '../counter-offer-modal/counter-offer-modal';
 
@@ -14,6 +15,9 @@ type OfferTab = 'received' | 'sent';
 })
 export class MyOffers implements OnInit {
   private offerService = inject(OfferService);
+  private authService = inject(AuthService);
+
+  currentUserId = this.authService.getUserId();
 
   receivedOffers = signal<OfferDto[]>([]);
   sentOffers = signal<OfferDto[]>([]);
@@ -53,6 +57,16 @@ export class MyOffers implements OnInit {
 
   visibleOffers(): OfferDto[] {
     return this.activeTab() === 'received' ? this.receivedOffers() : this.sentOffers();
+  }
+
+  // Con le controproposte il ruolo si inverte: chi non ha creato l'offerta
+  // pendente deve rispondere, solo chi l'ha creata può annullarla.
+  awaitingMyResponse(offer: OfferDto): boolean {
+    return offer.status === 'in_attesa' && offer.createdById !== this.currentUserId;
+  }
+
+  canCancel(offer: OfferDto): boolean {
+    return offer.status === 'in_attesa' && offer.createdById === this.currentUserId;
   }
 
   approve(offerId: number): void {

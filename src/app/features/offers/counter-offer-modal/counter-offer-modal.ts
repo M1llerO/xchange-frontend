@@ -5,6 +5,7 @@ import { OfferService } from '../../../services/offer';
 import { ItemService } from '../../../services/item';
 import { ItemDto } from '../../../models/item.model';
 import { OfferDto } from '../../../models/offer.model';
+import { extractErrorMessage } from '../../../core/api-error.util';
 
 @Component({
   selector: 'app-counter-offer-modal',
@@ -71,9 +72,9 @@ export class CounterOfferModal implements OnInit {
         this.submitting.set(false);
         this.submitted.emit(offer);
       },
-      error: () => {
+      error: (err) => {
         this.submitting.set(false);
-        this.errorMessage.set('Impossibile inviare la controproposta.');
+        this.errorMessage.set(extractErrorMessage(err, 'Impossibile inviare la controproposta.'));
       }
     });
   }

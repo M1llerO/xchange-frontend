@@ -1,6 +1,16 @@
 <section class="search">
   <h1>Cerca oggetti</h1>
 
+  @if (!authService.isLoggedIn()) {
+    <section class="auth-invite">
+      <p>Accedi o iscriviti per proporre scambi e contattare gli altri utenti.</p>
+      <div class="auth-invite-actions">
+        <a routerLink="/login" class="auth-login">Accedi</a>
+        <a routerLink="/register" class="auth-register">Iscriviti</a>
+      </div>
+    </section>
+  }
+
   @if (featured().length > 0) {
     <section class="featured">
       <h2>In evidenza</h2>
@@ -46,9 +56,9 @@
   } @else if (results().length === 0) {
     <p class="hint">Nessun annuncio trovato.</p>
   } @else {
-    <ul class="listing-grid">
+    <ul class="listing-list">
       @for (listing of results(); track listing.id) {
-        <li class="listing-card">
+        <li class="listing-row">
           <a class="listing-link" [routerLink]="['/listings', listing.id]">
             @if (imageUrl(listing); as url) {
               <img [src]="url" [alt]="listing.itemTitle" />
@@ -58,10 +68,19 @@
             <div class="listing-body">
               <h2>{{ listing.itemTitle }}</h2>
               <p class="category">{{ listing.categoryName }} · {{ listing.city }}</p>
-              @if (listing.itemEstimatedValue !== null) {
-                <p class="value">{{ listing.itemEstimatedValue | number: '1.0-2' }} €</p>
+              <p class="description">{{ listing.itemDescription }}</p>
+              @if (listing.acceptedCategoryNames?.length) {
+                <p class="accepted-categories">
+                  Accetta in cambio:
+                  @for (name of listing.acceptedCategoryNames; track name) {
+                    <span class="category-tag">{{ name }}</span>
+                  }
+                </p>
               }
             </div>
+            @if (listing.itemEstimatedValue !== null) {
+              <p class="value">{{ listing.itemEstimatedValue | number: '1.0-2' }} €</p>
+            }
           </a>
           <a class="report-link" [routerLink]="['/reports/new']" [queryParams]="{ listingId: listing.id }">
             Segnala annuncio
