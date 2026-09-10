@@ -28,4 +28,8 @@ export class ExchangeService {
   updateLogistics(id: number, data: UpdateExchangeLogisticsRequest) {
     return this.http.patch<ExchangeDto>(`${this.baseUrl}/${id}/logistics`, data);
   }
+
+  confirmLogistics(id: number) {
+    return this.http.patch<ExchangeDto>(`${this.baseUrl}/${id}/logistics/confirm`, {});
+  }
 }

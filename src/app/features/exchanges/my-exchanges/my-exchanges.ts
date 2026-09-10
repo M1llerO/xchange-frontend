@@ -130,6 +130,38 @@ export class MyExchanges implements OnInit {
       : exchange.offererConfirmedAt !== null;
   }
 
+  private isOwner(exchange: ExchangeDto): boolean {
+    return exchange.ownerId === this.currentUserId;
+  }
+
+  logisticsSet(exchange: ExchangeDto): boolean {
+    return !!exchange.location && !!exchange.method;
+  }
+
+  myLogisticsConfirmed(exchange: ExchangeDto): boolean {
+    return this.isOwner(exchange) ? exchange.logisticsConfirmedByOwner : exchange.logisticsConfirmedByOfferer;
+  }
+
+  counterpartLogisticsConfirmed(exchange: ExchangeDto): boolean {
+    return this.isOwner(exchange) ? exchange.logisticsConfirmedByOfferer : exchange.logisticsConfirmedByOwner;
+  }
+
+  canConfirmDelivery(exchange: ExchangeDto): boolean {
+    return this.logisticsSet(exchange) && exchange.logisticsConfirmedByOwner && exchange.logisticsConfirmedByOfferer;
+  }
+
+  confirmLogistics(exchange: ExchangeDto): void {
+    this.act(exchange.id, () =>
+      this.exchangeService.confirmLogistics(exchange.id).subscribe({
+        next: (updated) => this.replace(updated),
+        error: (err) => {
+          this.errorMessage.set(extractErrorMessage(err, 'Impossibile confermare luogo e metodo.'));
+          this.actingId.set(null);
+        }
+      })
+    );
+  }
+
   confirm(exchange: ExchangeDto): void {
     this.act(exchange.id, () =>
       this.exchangeService.confirm(exchange.id).subscribe({

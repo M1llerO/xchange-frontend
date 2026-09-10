@@ -82,6 +82,23 @@
               </button>
             }
 
+            @if (logisticsSet(exchange)) {
+              @if (myLogisticsConfirmed(exchange) && counterpartLogisticsConfirmed(exchange)) {
+                <p class="logistics-confirmed">✓ Luogo e metodo confermati da entrambi.</p>
+              } @else if (myLogisticsConfirmed(exchange)) {
+                <p class="logistics-pending">Hai confermato luogo e metodo, in attesa dell'altra parte.</p>
+              } @else {
+                <div class="logistics-confirm-row">
+                  <p class="logistics-pending">
+                    {{ counterpartLogisticsConfirmed(exchange) ? "L'altra parte ha confermato: confermi anche tu?" : 'Confermi il luogo e il metodo di scambio proposti?' }}
+                  </p>
+                  <button type="button" class="logistics-confirm-btn" (click)="confirmLogistics(exchange)" [disabled]="actingId() === exchange.id">
+                    Conferma luogo e metodo
+                  </button>
+                </div>
+              }
+            }
+
             <div class="actions">
               @if (hasConfirmed(exchange)) {
                 <span class="confirmed-hint">Hai già confermato, in attesa dell'altra parte.</span>
@@ -89,7 +106,8 @@
                 <button
                   type="button"
                   (click)="confirm(exchange)"
-                  [disabled]="actingId() === exchange.id"
+                  [disabled]="actingId() === exchange.id || !canConfirmDelivery(exchange)"
+                  [title]="canConfirmDelivery(exchange) ? '' : 'Prima entrambe le parti devono confermare luogo e metodo di scambio'"
                 >
                   Conferma scambio
                 </button>
@@ -103,6 +121,9 @@
                 Annulla
               </button>
             </div>
+            @if (!hasConfirmed(exchange) && !canConfirmDelivery(exchange)) {
+              <p class="hint delivery-blocked-hint">Prima entrambe le parti devono confermare luogo e metodo di scambio.</p>
+            }
           }
 
           @if (exchange.status === 'completato') {

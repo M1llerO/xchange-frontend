@@ -15,6 +15,8 @@ export interface ExchangeDto {
   reviewedByMe: boolean;
   location: string | null;
   method: ExchangeMethod | null;
+  logisticsConfirmedByOwner: boolean;
+  logisticsConfirmedByOfferer: boolean;
 }
 
 export interface UpdateExchangeLogisticsRequest {

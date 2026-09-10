@@ -13,7 +13,9 @@ const ERROR_MESSAGES_IT: Record<string, string> = {
   invalid_parameter: 'Uno dei parametri inviati non è valido.',
   authentication_failed: 'Credenziali non valide.',
   access_denied: 'Non hai i permessi per compiere questa azione.',
-  internal_error: 'Si è verificato un errore interno. Riprova più tardi.'
+  internal_error: 'Si è verificato un errore interno. Riprova più tardi.',
+  logistics_not_set: 'Imposta prima il luogo e il metodo di scambio.',
+  logistics_not_confirmed: 'Entrambe le parti devono prima confermare luogo e metodo di scambio.'
 };
 
 export function extractErrorMessage(err: HttpErrorResponse, fallback = 'Si è verificato un errore, riprova.'): string {
