@@ -9,9 +9,9 @@ import { RouterLink } from '@angular/router';
   template: `
     <div class="forbidden-container">
       <div class="forbidden-card">
-        <h1>403 - Access Forbidden</h1>
-        <p>You don't have permission to access this resource.</p>
-        <a routerLink="/" class="btn-home">Back to Home</a>
+        <h1>403 - Accesso negato</h1>
+        <p>Non hai i permessi per accedere a questa risorsa.</p>
+        <a routerLink="/" class="btn-home">Torna alla home</a>
       </div>
     </div>
   `,

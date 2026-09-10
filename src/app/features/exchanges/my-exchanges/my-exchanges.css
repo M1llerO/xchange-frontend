@@ -124,3 +124,78 @@
   font-size: var(--font-size-sm);
   color: var(--color-neutral-600);
 }
+
+.logistics-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin: 0;
+}
+
+.logistics-toggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.logistics-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+  padding: var(--space-3);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+}
+
+.logistics-form label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.logistics-form input,
+.logistics-form select {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  padding: var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.logistics-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.logistics-actions button {
+  padding: var(--space-1) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  background: var(--color-cta);
+  color: var(--color-neutral-0);
+  cursor: pointer;
+}
+
+.logistics-actions button:hover:not(:disabled) {
+  background: var(--color-cta-dark);
+}
+
+.logistics-actions button.cancel {
+  background: var(--color-neutral-200);
+  color: var(--color-text);
+}

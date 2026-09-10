@@ -10,7 +10,7 @@
       <!-- Public Links -->
       <li class="nav-item">
         <a routerLink="/listings" routerLinkActive="active">
-          Browse
+          Annunci
         </a>
       </li>
 
@@ -23,76 +23,77 @@
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/items" routerLinkActive="active">
-          My Items
+          I miei oggetti
         </a>
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/offers" routerLinkActive="active">
-          Offers
+          Offerte
         </a>
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/exchanges" routerLinkActive="active">
-          Exchanges
+          Scambi
         </a>
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/messages" routerLinkActive="active">
-          Messages
+          Messaggi
+          <span *ngIf="notificationService.unreadThreadCount() as count" class="notification-badge">{{ count }}</span>
         </a>
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item">
         <a routerLink="/reviews" routerLinkActive="active">
-          Reviews
+          Recensioni
         </a>
       </li>
 
       <!-- Admin Links -->
       <li *ngIf="authService.hasRole('ADMIN')" class="nav-item admin">
         <a routerLink="/admin/reports" routerLinkActive="active">
-          Reports
+          Segnalazioni
         </a>
       </li>
 
       <li *ngIf="authService.hasRole('ADMIN')" class="nav-item admin">
         <a routerLink="/admin/categories" routerLinkActive="active">
-          Categories
+          Categorie
         </a>
       </li>
 
       <!-- Auth Links -->
       <li *ngIf="!authService.isLoggedIn()" class="nav-item">
         <a routerLink="/login" class="btn-login">
-          Login
+          Accedi
         </a>
       </li>
 
       <li *ngIf="!authService.isLoggedIn()" class="nav-item">
         <a routerLink="/register" class="btn-register">
-          Register
+          Registrati
         </a>
       </li>
 
       <!-- User Menu -->
       <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
         <button class="dropdown-toggle" (click)="toggleDropdown()">
-          {{ authService.getUsername() || 'Profile' }}
+          {{ authService.getUsername() || 'Profilo' }}
           <span class="caret">▼</span>
         </button>
         <ul class="dropdown-menu" [class.active]="dropdownOpen()">
           <li>
-            <a routerLink="/profile">View Profile</a>
+            <a routerLink="/profile">Vedi profilo</a>
           </li>
           <li>
-            <a routerLink="/reports/mine">My Reports</a>
+            <a routerLink="/reports/mine">Le mie segnalazioni</a>
           </li>
           <li class="divider"></li>
           <li>
-            <a (click)="logout()" class="logout-link">Logout</a>
+            <a (click)="logout()" class="logout-link">Esci</a>
           </li>
         </ul>
       </li>

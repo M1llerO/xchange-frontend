@@ -1,14 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ExchangeService } from '../../../services/exchange';
 import { AuthService } from '../../../services/auth';
 import { extractErrorMessage } from '../../../core/api-error.util';
-import { ExchangeDto } from '../../../models/exchange.model';
+import { ExchangeDto, ExchangeMethod } from '../../../models/exchange.model';
+
+export const EXCHANGE_METHOD_LABELS: Record<ExchangeMethod, string> = {
+  di_persona: 'Di persona',
+  spedizione: 'Spedizione'
+};
 
 @Component({
   selector: 'app-my-exchanges',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './my-exchanges.html',
   styleUrl: './my-exchanges.css'
 })
@@ -16,10 +22,17 @@ export class MyExchanges implements OnInit {
   private exchangeService = inject(ExchangeService);
   private authService = inject(AuthService);
 
+  readonly methodLabels = EXCHANGE_METHOD_LABELS;
+  readonly methodOptions: ExchangeMethod[] = ['di_persona', 'spedizione'];
+
   exchanges = signal<ExchangeDto[]>([]);
   loading = signal(true);
   errorMessage = signal<string | null>(null);
   actingId = signal<number | null>(null);
+
+  editingLogisticsId = signal<number | null>(null);
+  draftLocation = signal('');
+  draftMethod = signal<ExchangeMethod | ''>('');
 
   currentUserId = this.authService.getUserId();
 
@@ -72,6 +85,45 @@ export class MyExchanges implements OnInit {
           this.actingId.set(null);
         }
       })
+    );
+  }
+
+  startEditLogistics(exchange: ExchangeDto): void {
+    this.errorMessage.set(null);
+    this.editingLogisticsId.set(exchange.id);
+    this.draftLocation.set(exchange.location ?? '');
+    this.draftMethod.set(exchange.method ?? '');
+  }
+
+  cancelEditLogistics(): void {
+    this.editingLogisticsId.set(null);
+  }
+
+  saveLogistics(exchange: ExchangeDto): void {
+    const location = this.draftLocation().trim();
+    const method = this.draftMethod();
+
+    if (!location && !method) {
+      this.errorMessage.set('Indica almeno il luogo o il metodo di scambio.');
+      return;
+    }
+
+    this.act(exchange.id, () =>
+      this.exchangeService
+        .updateLogistics(exchange.id, {
+          ...(location ? { location } : {}),
+          ...(method ? { method } : {})
+        })
+        .subscribe({
+          next: (updated) => {
+            this.replace(updated);
+            this.editingLogisticsId.set(null);
+          },
+          error: (err) => {
+            this.errorMessage.set(extractErrorMessage(err, 'Impossibile salvare i dettagli dello scambio.'));
+            this.actingId.set(null);
+          }
+        })
     );
   }
 

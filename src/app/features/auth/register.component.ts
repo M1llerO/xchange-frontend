@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { extractErrorMessage } from '../../core/api-error.util';
 
 @Component({
   selector: 'app-register',
@@ -84,19 +85,19 @@ export class RegisterComponent {
     if (this.hasNumber()) strength++;
     if (this.hasSpecialChar()) strength++;
 
-    if (strength < 2) return 'Weak';
-    if (strength < 4) return 'Fair';
-    if (strength < 5) return 'Good';
-    return 'Strong';
+    if (strength < 2) return 'Debole';
+    if (strength < 4) return 'Sufficiente';
+    if (strength < 5) return 'Buona';
+    return 'Forte';
   }
 
   getPasswordStrengthClass(): string {
     const strength = this.getPasswordStrengthText();
     switch (strength) {
-      case 'Weak': return 'strength-weak';
-      case 'Fair': return 'strength-fair';
-      case 'Good': return 'strength-good';
-      case 'Strong': return 'strength-strong';
+      case 'Debole': return 'strength-weak';
+      case 'Sufficiente': return 'strength-fair';
+      case 'Buona': return 'strength-good';
+      case 'Forte': return 'strength-strong';
       default: return '';
     }
   }
@@ -116,12 +117,12 @@ export class RegisterComponent {
     }).subscribe({
       next: () => {
         this.router.navigate(['/login'], {
-          queryParams: { message: 'Registration successful. Please login.' }
+          queryParams: { message: 'Registrazione completata. Accedi per continuare.' }
         });
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set(err.error?.message || 'Registration failed. Please try again.');
+        this.errorMessage.set(extractErrorMessage(err, 'Registrazione non riuscita. Riprova.'));
       }
     });
   }

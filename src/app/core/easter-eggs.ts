@@ -96,7 +96,7 @@ export class EasterEggsService {
         this.coreDotClicks = 0;
         const tooltip = document.createElement('div');
         tooltip.className = 'ee-core-tooltip';
-        tooltip.textContent = 'You found the core.';
+        tooltip.textContent = 'Hai trovato il nucleo.';
         document.body.appendChild(tooltip);
         setTimeout(() => tooltip.remove(), 3000);
       }

@@ -1,6 +1,6 @@
 <div class="auth-container">
   <div class="auth-card">
-    <h1>Login</h1>
+    <h1>Accedi</h1>
 
     <div *ngIf="successMessage()" class="success-message">
       {{ successMessage() }}
@@ -8,16 +8,16 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="username">Username:</label>
+        <label for="username">Nome utente:</label>
         <input
           id="username"
           type="text"
           formControlName="username"
-          placeholder="Enter username"
+          placeholder="Inserisci il nome utente"
           autocomplete="username"
         />
         <div class="error" *ngIf="isFieldInvalid('username')">
-          Username is required
+          Il nome utente è obbligatorio
         </div>
       </div>
 
@@ -27,11 +27,11 @@
           id="password"
           type="password"
           formControlName="password"
-          placeholder="Enter password"
+          placeholder="Inserisci la password"
           autocomplete="current-password"
         />
         <div class="error" *ngIf="isFieldInvalid('password')">
-          Password is required
+          La password è obbligatoria
         </div>
       </div>
 
@@ -40,7 +40,7 @@
         [disabled]="form.invalid || loading()"
         class="btn-primary"
       >
-        {{ loading() ? 'Logging in...' : 'Login' }}
+        {{ loading() ? 'Accesso in corso…' : 'Accedi' }}
       </button>
     </form>
 
@@ -49,8 +49,8 @@
     </div>
 
     <p>
-      Don't have an account?
-      <a routerLink="/register">Register here</a>
+      Non hai un account?
+      <a routerLink="/register">Registrati qui</a>
     </p>
   </div>
 </div>

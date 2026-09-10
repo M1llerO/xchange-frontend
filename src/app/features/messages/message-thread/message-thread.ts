@@ -1,11 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { interval } from 'rxjs';
 import { MessageService } from '../../../services/message';
 import { AuthService } from '../../../services/auth';
+import { NotificationService } from '../../../services/notification';
 import { MessageDto } from '../../../models/message.model';
 import { extractErrorMessage } from '../../../core/api-error.util';
+
+const POLL_INTERVAL_MS = 4000;
 
 @Component({
   selector: 'app-message-thread',
@@ -17,7 +22,9 @@ export class MessageThread implements OnInit {
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
 
   offerId = signal(0);
   currentUserId = this.authService.getUserId();
@@ -38,17 +45,29 @@ export class MessageThread implements OnInit {
       this.messages.set([]);
       this.errorMessage.set(null);
       this.loading.set(true);
+      this.loadThread(offerId, true);
+    });
 
-      this.messageService.getThread(offerId).subscribe({
-        next: (messages) => {
-          this.messages.set(messages);
-          this.loading.set(false);
-        },
-        error: () => {
+    // Aggiorna la conversazione periodicamente, senza ricaricare la pagina.
+    interval(POLL_INTERVAL_MS)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadThread(this.offerId(), false));
+  }
+
+  private loadThread(offerId: number, showLoadingState: boolean): void {
+    if (!offerId) return;
+    this.messageService.getThread(offerId).subscribe({
+      next: (messages) => {
+        this.messages.set(messages);
+        if (showLoadingState) this.loading.set(false);
+        this.notificationService.refresh();
+      },
+      error: () => {
+        if (showLoadingState) {
           this.errorMessage.set('Impossibile caricare la conversazione.');
           this.loading.set(false);
         }
-      });
+      }
     });
   }
 

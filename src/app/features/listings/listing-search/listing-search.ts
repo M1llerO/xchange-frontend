@@ -60,10 +60,14 @@ export class ListingSearch implements OnInit {
       })
       .subscribe({
         next: (listings) => {
-          this.results.set(listings);
+          // Non mostrare i propri annunci tra i risultati di ricerca.
+          const currentUserId = this.authService.getUserId();
+          const others = listings.filter((l) => l.ownerId === undefined || l.ownerId !== currentUserId);
+
+          this.results.set(others);
           if (isInitialLoad) {
             // il primo caricamento (senza filtri) alimenta anche la striscia "in evidenza"
-            const sorted = [...listings].sort(
+            const sorted = [...others].sort(
               (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
             );
             this.featured.set(sorted.slice(0, 6));

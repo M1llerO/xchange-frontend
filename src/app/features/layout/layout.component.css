@@ -1,2 +1,18 @@
 /* Component-specific overrides go here */
 
+.notification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: var(--text-white);
+  font-size: 0.7rem;
+  font-weight: var(--font-semibold);
+  vertical-align: middle;
+}
+

@@ -22,7 +22,42 @@
             Vedi il profilo della controparte
           </a>
 
+          @if (exchange.location || exchange.method) {
+            <p class="logistics-summary">
+              @if (exchange.location) { <span>📍 {{ exchange.location }}</span> }
+              @if (exchange.method) { <span>{{ methodLabels[exchange.method] }}</span> }
+            </p>
+          }
+
           @if (exchange.status === 'in_corso') {
+            @if (editingLogisticsId() === exchange.id) {
+              <div class="logistics-form">
+                <label>
+                  Luogo di scambio
+                  <input type="text" [(ngModel)]="draftLocation" name="location-{{ exchange.id }}" maxlength="255" placeholder="Es. Piazza Duomo" />
+                </label>
+                <label>
+                  Metodo
+                  <select [(ngModel)]="draftMethod" name="method-{{ exchange.id }}">
+                    <option value="">Non specificato</option>
+                    @for (option of methodOptions; track option) {
+                      <option [value]="option">{{ methodLabels[option] }}</option>
+                    }
+                  </select>
+                </label>
+                <div class="logistics-actions">
+                  <button type="button" (click)="saveLogistics(exchange)" [disabled]="actingId() === exchange.id">
+                    Salva
+                  </button>
+                  <button type="button" class="cancel" (click)="cancelEditLogistics()">Annulla</button>
+                </div>
+              </div>
+            } @else {
+              <button type="button" class="logistics-toggle" (click)="startEditLogistics(exchange)">
+                {{ exchange.location || exchange.method ? 'Modifica luogo/metodo' : 'Aggiungi luogo e metodo di scambio' }}
+              </button>
+            }
+
             <div class="actions">
               @if (hasConfirmed(exchange)) {
                 <span class="confirmed-hint">Hai già confermato, in attesa dell'altra parte.</span>

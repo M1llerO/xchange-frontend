@@ -1,4 +1,5 @@
 export type ExchangeStatus = 'in_corso' | 'completato' | 'annullato';
+export type ExchangeMethod = 'di_persona' | 'spedizione';
 
 export interface ExchangeDto {
   id: number;
@@ -12,4 +13,11 @@ export interface ExchangeDto {
   completedAt: string | null;
   createdAt: string;
   reviewedByMe: boolean;
+  location: string | null;
+  method: ExchangeMethod | null;
+}
+
+export interface UpdateExchangeLogisticsRequest {
+  location?: string;
+  method?: ExchangeMethod;
 }

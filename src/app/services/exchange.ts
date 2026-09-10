@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ExchangeDto } from '../models/exchange.model';
+import { ExchangeDto, UpdateExchangeLogisticsRequest } from '../models/exchange.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeService {
@@ -23,5 +23,9 @@ export class ExchangeService {
 
   cancel(id: number) {
     return this.http.patch<ExchangeDto>(`${this.baseUrl}/${id}/cancel`, {});
+  }
+
+  updateLogistics(id: number, data: UpdateExchangeLogisticsRequest) {
+    return this.http.patch<ExchangeDto>(`${this.baseUrl}/${id}/logistics`, data);
   }
 }

@@ -1,19 +1,19 @@
 <div class="auth-container">
   <div class="auth-card">
-    <h1>Register</h1>
+    <h1>Registrati</h1>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="username">Username:</label>
+        <label for="username">Nome utente:</label>
         <input
           id="username"
           type="text"
           formControlName="username"
-          placeholder="Enter username"
+          placeholder="Inserisci il nome utente"
           autocomplete="username"
         />
         <div class="error" *ngIf="isFieldInvalid('username')">
-          <span *ngIf="form.get('username')?.errors?.['required']">Username is required</span>
-          <span *ngIf="form.get('username')?.errors?.['minlength']">Username must be at least 3 characters</span>
+          <span *ngIf="form.get('username')?.errors?.['required']">Il nome utente è obbligatorio</span>
+          <span *ngIf="form.get('username')?.errors?.['minlength']">Il nome utente deve avere almeno 3 caratteri</span>
         </div>
       </div>
 
@@ -23,12 +23,12 @@
           id="email"
           type="email"
           formControlName="email"
-          placeholder="Enter email"
+          placeholder="Inserisci l'email"
           autocomplete="email"
         />
         <div class="error" *ngIf="isFieldInvalid('email')">
-          <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
-          <span *ngIf="form.get('email')?.errors?.['email']">Invalid email format</span>
+          <span *ngIf="form.get('email')?.errors?.['required']">L'email è obbligatoria</span>
+          <span *ngIf="form.get('email')?.errors?.['email']">Formato email non valido</span>
         </div>
       </div>
 
@@ -38,37 +38,37 @@
           id="password"
           type="password"
           formControlName="password"
-          placeholder="Enter strong password"
+          placeholder="Inserisci una password sicura"
           autocomplete="new-password"
         />
         <div class="password-strength" [ngClass]="getPasswordStrengthClass()">
           {{ getPasswordStrengthText() }}
         </div>
         <div class="password-requirements">
-          <p [class.met]="hasMinLength()">✓ At least 12 characters</p>
-          <p [class.met]="hasUpperCase()">✓ Contains uppercase (A-Z)</p>
-          <p [class.met]="hasLowerCase()">✓ Contains lowercase (a-z)</p>
-          <p [class.met]="hasNumber()">✓ Contains number (0-9)</p>
-          <p [class.met]="hasSpecialChar()">✓ Contains special character (!@#$%^&*)</p>
+          <p [class.met]="hasMinLength()">✓ Almeno 12 caratteri</p>
+          <p [class.met]="hasUpperCase()">✓ Contiene una maiuscola (A-Z)</p>
+          <p [class.met]="hasLowerCase()">✓ Contiene una minuscola (a-z)</p>
+          <p [class.met]="hasNumber()">✓ Contiene un numero (0-9)</p>
+          <p [class.met]="hasSpecialChar()">✓ Contiene un carattere speciale (!@#$%^&*)</p>
         </div>
         <div class="error" *ngIf="isFieldInvalid('password')">
-          <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
-          <span *ngIf="form.get('password')?.errors?.['strongPassword']">Password does not meet strength requirements</span>
+          <span *ngIf="form.get('password')?.errors?.['required']">La password è obbligatoria</span>
+          <span *ngIf="form.get('password')?.errors?.['strongPassword']">La password non soddisfa i requisiti di sicurezza</span>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="confirmPassword">Confirm Password:</label>
+        <label for="confirmPassword">Conferma password:</label>
         <input
           id="confirmPassword"
           type="password"
           formControlName="confirmPassword"
-          placeholder="Confirm password"
+          placeholder="Conferma la password"
           autocomplete="new-password"
         />
         <div class="error" *ngIf="isFieldInvalid('confirmPassword')">
-          <span *ngIf="form.get('confirmPassword')?.errors?.['required']">Please confirm password</span>
-          <span *ngIf="form.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not match</span>
+          <span *ngIf="form.get('confirmPassword')?.errors?.['required']">Conferma la password</span>
+          <span *ngIf="form.get('confirmPassword')?.errors?.['passwordMismatch']">Le password non coincidono</span>
         </div>
       </div>
 
@@ -77,7 +77,7 @@
         [disabled]="form.invalid || loading()"
         class="btn-primary"
       >
-        {{ loading() ? 'Registering...' : 'Register' }}
+        {{ loading() ? 'Registrazione in corso…' : 'Registrati' }}
       </button>
     </form>
 
@@ -86,8 +86,8 @@
     </div>
 
     <p>
-      Already have an account?
-      <a routerLink="/login">Login here</a>
+      Hai già un account?
+      <a routerLink="/login">Accedi qui</a>
     </p>
   </div>
 </div>

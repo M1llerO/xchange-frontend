@@ -38,6 +38,7 @@ export interface ListingSearchDto {
   primaryImageUrl: string | null;
   acceptedCategoryIds?: number[];
   acceptedCategoryNames?: string[];
+  ownerId?: number;
 }
 
 export interface ListingDetailDto {
