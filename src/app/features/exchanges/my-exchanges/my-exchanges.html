@@ -18,6 +18,30 @@
             <span class="status" [attr.data-status]="exchange.status">{{ exchange.status }}</span>
           </div>
 
+          @if (listingPreview(exchange); as listingItem) {
+            <div class="items-preview">
+              <div class="item-card">
+                @if (listingItem.imageUrl) {
+                  <img class="item-thumb" [src]="resolveAssetUrl(listingItem.imageUrl)" [alt]="listingItem.title" />
+                } @else {
+                  <div class="item-thumb item-thumb-placeholder" aria-hidden="true">Nessuna immagine</div>
+                }
+                <span class="item-title">{{ listingItem.title }}</span>
+              </div>
+              <span class="items-preview-arrow" aria-hidden="true">⇄</span>
+              @if (offerPreview(exchange); as offeredItem) {
+                <div class="item-card">
+                  @if (offeredItem.imageUrl) {
+                    <img class="item-thumb" [src]="resolveAssetUrl(offeredItem.imageUrl)" [alt]="offeredItem.title" />
+                  } @else {
+                    <div class="item-thumb item-thumb-placeholder" aria-hidden="true">Nessuna immagine</div>
+                  }
+                  <span class="item-title">{{ offeredItem.title }}</span>
+                </div>
+              }
+            </div>
+          }
+
           <a class="counterpart" [routerLink]="['/profile', counterpartId(exchange)]">
             Vedi il profilo della controparte
           </a>

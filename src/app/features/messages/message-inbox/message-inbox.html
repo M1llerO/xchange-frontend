@@ -13,7 +13,7 @@
         <li>
           <a class="conversation-row" [routerLink]="['/messages', conversation.offerId]">
             <div class="conversation-main">
-              <span class="offer-label">Trattativa #{{ conversation.offerId }}</span>
+              <span class="offer-label">{{ threadLabel(conversation.offerId) }}</span>
               <span class="preview">{{ conversation.senderUsername }}: {{ conversation.body }}</span>
             </div>
             @if (isUnread(conversation)) {

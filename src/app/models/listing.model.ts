@@ -11,7 +11,11 @@ publishedAt: string;
 updatedAt: string;
 acceptedCategoryIds: number[];
 status: ListingStatus;
-
+itemTitle?: string;
+itemDescription?: string;
+itemEstimatedValue?: number | null;
+categoryName?: string;
+primaryImageUrl?: string | null;
 }
 
 export interface CreateListingRequest {

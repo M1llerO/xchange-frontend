@@ -2,15 +2,24 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ExchangeService } from '../../../services/exchange';
 import { AuthService } from '../../../services/auth';
+import { ListingService } from '../../../services/listing';
+import { OfferService } from '../../../services/offer';
 import { extractErrorMessage } from '../../../core/api-error.util';
+import { resolveAssetUrl } from '../../../core/asset-url.util';
 import { ExchangeDto, ExchangeMethod } from '../../../models/exchange.model';
 
 export const EXCHANGE_METHOD_LABELS: Record<ExchangeMethod, string> = {
   di_persona: 'Di persona',
   spedizione: 'Spedizione'
 };
+
+interface ItemPreview {
+  title: string;
+  imageUrl: string | null;
+}
 
 @Component({
   selector: 'app-my-exchanges',
@@ -21,9 +30,18 @@ export const EXCHANGE_METHOD_LABELS: Record<ExchangeMethod, string> = {
 export class MyExchanges implements OnInit {
   private exchangeService = inject(ExchangeService);
   private authService = inject(AuthService);
+  private listingService = inject(ListingService);
+  private offerService = inject(OfferService);
 
   readonly methodLabels = EXCHANGE_METHOD_LABELS;
   readonly methodOptions: ExchangeMethod[] = ['di_persona', 'spedizione'];
+  readonly resolveAssetUrl = resolveAssetUrl;
+
+  // id scambio -> anteprima dei due oggetti coinvolti (annuncio e offerta accettata).
+  // Segnali (non semplici campi) perché l'app gira in modalità zoneless: un
+  // campo mutato dentro una subscribe HTTP non farebbe mai ripartire il render.
+  private listingPreviews = signal(new Map<number, ItemPreview>());
+  private offerPreviews = signal(new Map<number, ItemPreview>());
 
   exchanges = signal<ExchangeDto[]>([]);
   loading = signal(true);
@@ -46,12 +64,60 @@ export class MyExchanges implements OnInit {
       next: (exchanges) => {
         this.exchanges.set(exchanges);
         this.loading.set(false);
+        this.loadItemPreviews(exchanges);
       },
       error: () => {
         this.errorMessage.set('Impossibile caricare gli scambi.');
         this.loading.set(false);
       }
     });
+  }
+
+  private loadItemPreviews(exchanges: ExchangeDto[]): void {
+    if (exchanges.length === 0) return;
+
+    forkJoin({
+      listings: forkJoin(exchanges.map((e) => this.listingService.getById(e.listingId))),
+      received: this.offerService.getReceived(),
+      sent: this.offerService.getSent()
+    }).subscribe({
+      next: ({ listings, received, sent }) => {
+        const offerById = new Map([...received, ...sent].map((o) => [o.offerId, o]));
+        const listingMap = new Map<number, ItemPreview>();
+        const offerMap = new Map<number, ItemPreview>();
+
+        exchanges.forEach((exchange, index) => {
+          const listing = listings[index];
+          listingMap.set(exchange.id, {
+            title: listing.itemTitle,
+            imageUrl: listing.images[0]?.url ?? null
+          });
+
+          const offer = offerById.get(exchange.offerId);
+          if (offer && offer.offeredItems.length > 0) {
+            offerMap.set(exchange.id, {
+              title: offer.offeredItems.map((item) => item.title).join(' + '),
+              imageUrl: offer.offeredItems[0].imageUrl
+            });
+          }
+        });
+
+        this.listingPreviews.set(listingMap);
+        this.offerPreviews.set(offerMap);
+      },
+      error: () => {
+        // le anteprime sono un arricchimento visivo: se falliscono, la pagina
+        // resta comunque utilizzabile senza immagini/titoli degli oggetti
+      }
+    });
+  }
+
+  listingPreview(exchange: ExchangeDto): ItemPreview | null {
+    return this.listingPreviews().get(exchange.id) ?? null;
+  }
+
+  offerPreview(exchange: ExchangeDto): ItemPreview | null {
+    return this.offerPreviews().get(exchange.id) ?? null;
   }
 
   counterpartId(exchange: ExchangeDto): number {

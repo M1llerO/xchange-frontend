@@ -26,8 +26,7 @@
 
 .listing-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--space-3);
   background: var(--color-surface);
   border: 1px solid var(--color-neutral-200);
@@ -35,21 +34,62 @@
   padding: var(--space-3);
 }
 
-.listing-main {
+.listing-item {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   min-width: 0;
 }
 
-.city {
+.item-thumb {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.item-thumb.small {
+  width: 40px;
+  height: 40px;
+}
+
+.item-thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-400);
+  font-size: 0.6rem;
+  text-align: center;
+  line-height: 1.1;
+  padding: var(--space-1);
+}
+
+.listing-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.item-title {
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.city {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .status {
+  align-self: flex-start;
   flex-shrink: 0;
   font-size: var(--font-size-xs);
   font-weight: 600;
@@ -79,7 +119,46 @@
   color: var(--color-danger);
 }
 
+.pending-offers {
+  padding: var(--space-3);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+}
+
+.pending-label {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.offered-item-list {
+  list-style: none;
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.offered-item-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.item-condition {
+  color: var(--color-neutral-600);
+}
+
+.offers-link {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .delete-btn {
+  align-self: flex-start;
   flex-shrink: 0;
   border: 1px solid var(--color-danger);
   background: transparent;

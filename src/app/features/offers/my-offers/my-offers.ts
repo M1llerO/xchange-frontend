@@ -4,6 +4,8 @@ import { forkJoin } from 'rxjs';
 import { OfferService } from '../../../services/offer';
 import { AuthService } from '../../../services/auth';
 import { OfferDto } from '../../../models/offer.model';
+import { resolveAssetUrl } from '../../../core/asset-url.util';
+import { CONDITION_LABELS } from '../../items/item.constants';
 import { CounterOfferModal } from '../counter-offer-modal/counter-offer-modal';
 
 type OfferTab = 'received' | 'sent';
@@ -19,6 +21,7 @@ export class MyOffers implements OnInit {
   private authService = inject(AuthService);
 
   currentUserId = this.authService.getUserId();
+  readonly conditionLabels = CONDITION_LABELS;
 
   private allOffers = signal<OfferDto[]>([]);
   activeTab = signal<OfferTab>('received');
@@ -57,6 +60,10 @@ export class MyOffers implements OnInit {
 
   setTab(tab: OfferTab): void {
     this.activeTab.set(tab);
+  }
+
+  itemImageUrl(imageUrl: string | null): string {
+    return resolveAssetUrl(imageUrl);
   }
 
   // Una controproposta creata dalla controparte va mostrata tra le "ricevute"

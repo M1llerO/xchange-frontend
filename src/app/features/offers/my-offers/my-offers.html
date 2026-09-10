@@ -37,8 +37,18 @@
           <ul class="item-list">
             @for (item of offer.offeredItems; track item.id) {
               <li class="item-row">
-                <span class="item-title">{{ item.title }}</span>
-                <span class="item-condition">{{ item.condition }}</span>
+                @if (item.imageUrl) {
+                  <img class="item-thumb" [src]="itemImageUrl(item.imageUrl)" [alt]="item.title" />
+                } @else {
+                  <div class="item-thumb item-thumb-placeholder" aria-hidden="true">Nessuna immagine</div>
+                }
+                <div class="item-info">
+                  <span class="item-title">{{ item.title }}</span>
+                  <span class="item-condition">{{ conditionLabels[item.condition] }}</span>
+                  @if (item.estimatedValue !== null) {
+                    <span class="item-value">{{ item.estimatedValue | number: '1.0-2' }} €</span>
+                  }
+                </div>
               </li>
             }
           </ul>

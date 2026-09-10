@@ -12,6 +12,7 @@ export interface OfferedItemDto {
 
 export interface OfferDto {
   offerId: number;
+  listingId?: number;
   offererId: number;
   offererName: string;
   offeredItems: OfferedItemDto[];

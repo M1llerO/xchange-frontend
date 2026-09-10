@@ -3,9 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { interval } from 'rxjs';
+import { forkJoin, interval } from 'rxjs';
 import { MessageService } from '../../../services/message';
 import { AuthService } from '../../../services/auth';
+import { OfferService } from '../../../services/offer';
 import { NotificationService } from '../../../services/notification';
 import { MessageDto } from '../../../models/message.model';
 import { extractErrorMessage } from '../../../core/api-error.util';
@@ -22,6 +23,7 @@ export class MessageThread implements OnInit {
   private route = inject(ActivatedRoute);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private offerService = inject(OfferService);
   private notificationService = inject(NotificationService);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
@@ -33,6 +35,7 @@ export class MessageThread implements OnInit {
   loading = signal(true);
   sending = signal(false);
   errorMessage = signal<string | null>(null);
+  threadItemTitle = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
     body: ['', [Validators.required, Validators.maxLength(2000)]]
@@ -43,15 +46,35 @@ export class MessageThread implements OnInit {
       const offerId = Number(params.get('offerId'));
       this.offerId.set(offerId);
       this.messages.set([]);
+      this.threadItemTitle.set(null);
       this.errorMessage.set(null);
       this.loading.set(true);
       this.loadThread(offerId, true);
+      this.loadThreadItemTitle(offerId);
     });
 
     // Aggiorna la conversazione periodicamente, senza ricaricare la pagina.
     interval(POLL_INTERVAL_MS)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadThread(this.offerId(), false));
+  }
+
+  // Le conversazioni sono sempre agganciate all'offerta "radice" della
+  // trattativa: recuperiamo il titolo degli oggetti proposti in quella prima
+  // offerta per mostrarlo come titolo della chat invece di "Trattativa #N".
+  private loadThreadItemTitle(offerId: number): void {
+    if (!offerId) return;
+    forkJoin({
+      received: this.offerService.getReceived(),
+      sent: this.offerService.getSent()
+    }).subscribe({
+      next: ({ received, sent }) => {
+        const offer = [...received, ...sent].find((o) => o.offerId === offerId);
+        const title = offer?.offeredItems.map((item) => item.title).join(' + ') ?? null;
+        this.threadItemTitle.set(title || null);
+      },
+      error: () => {}
+    });
   }
 
   private loadThread(offerId: number, showLoadingState: boolean): void {
