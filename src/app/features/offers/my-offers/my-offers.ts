@@ -70,11 +70,15 @@ export class MyOffers implements OnInit {
   // anche se il thread era nato da un'offerta che io stesso avevo inviato:
   // ciò che conta è chi ha creato l'ultima riga, non la direzione originale.
   visibleOffers(): OfferDto[] {
-    return this.allOffers().filter((offer) =>
-      this.activeTab() === 'received'
-        ? offer.createdById !== this.currentUserId
-        : offer.createdById === this.currentUserId
-    );
+    return this.allOffers()
+      .filter((offer) =>
+        this.activeTab() === 'received'
+          ? offer.createdById !== this.currentUserId
+          : offer.createdById === this.currentUserId
+      )
+      // offerId è progressivo: usato come proxy dell'ordine cronologico
+      // (più recente in alto) in assenza di un campo createdAt dal backend.
+      .sort((a, b) => b.offerId - a.offerId);
   }
 
   // Con le controproposte il ruolo si inverte: chi non ha creato l'offerta

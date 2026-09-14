@@ -51,6 +51,7 @@ export class MyExchanges implements OnInit {
   editingLogisticsId = signal<number | null>(null);
   draftLocation = signal('');
   draftMethod = signal<ExchangeMethod | ''>('');
+  draftTimeSlot = signal('');
 
   currentUserId = this.authService.getUserId();
 
@@ -135,7 +136,7 @@ export class MyExchanges implements OnInit {
   }
 
   logisticsSet(exchange: ExchangeDto): boolean {
-    return !!exchange.location && !!exchange.method;
+    return !!exchange.location && !!exchange.method && !!exchange.timeSlot;
   }
 
   myLogisticsConfirmed(exchange: ExchangeDto): boolean {
@@ -191,6 +192,7 @@ export class MyExchanges implements OnInit {
     this.editingLogisticsId.set(exchange.id);
     this.draftLocation.set(exchange.location ?? '');
     this.draftMethod.set(exchange.method ?? '');
+    this.draftTimeSlot.set(exchange.timeSlot ?? '');
   }
 
   cancelEditLogistics(): void {
@@ -200,9 +202,10 @@ export class MyExchanges implements OnInit {
   saveLogistics(exchange: ExchangeDto): void {
     const location = this.draftLocation().trim();
     const method = this.draftMethod();
+    const timeSlot = this.draftTimeSlot().trim();
 
-    if (!location && !method) {
-      this.errorMessage.set('Indica almeno il luogo o il metodo di scambio.');
+    if (!location && !method && !timeSlot) {
+      this.errorMessage.set('Indica almeno il luogo, il metodo o la fascia oraria di scambio.');
       return;
     }
 
@@ -210,7 +213,8 @@ export class MyExchanges implements OnInit {
       this.exchangeService
         .updateLogistics(exchange.id, {
           ...(location ? { location } : {}),
-          ...(method ? { method } : {})
+          ...(method ? { method } : {}),
+          ...(timeSlot ? { timeSlot } : {})
         })
         .subscribe({
           next: (updated) => {

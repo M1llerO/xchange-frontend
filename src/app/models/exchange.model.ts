@@ -15,6 +15,7 @@ export interface ExchangeDto {
   reviewedByMe: boolean;
   location: string | null;
   method: ExchangeMethod | null;
+  timeSlot: string | null;
   logisticsConfirmedByOwner: boolean;
   logisticsConfirmedByOfferer: boolean;
 }
@@ -22,4 +23,5 @@ export interface ExchangeDto {
 export interface UpdateExchangeLogisticsRequest {
   location?: string;
   method?: ExchangeMethod;
+  timeSlot?: string;
 }

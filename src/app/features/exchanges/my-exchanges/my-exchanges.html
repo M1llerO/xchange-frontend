@@ -46,10 +46,11 @@
             Vedi il profilo della controparte
           </a>
 
-          @if (exchange.location || exchange.method) {
+          @if (exchange.location || exchange.method || exchange.timeSlot) {
             <p class="logistics-summary">
               @if (exchange.location) { <span>📍 {{ exchange.location }}</span> }
               @if (exchange.method) { <span>{{ methodLabels[exchange.method] }}</span> }
+              @if (exchange.timeSlot) { <span>🕒 {{ exchange.timeSlot }}</span> }
             </p>
           }
 
@@ -69,6 +70,10 @@
                     }
                   </select>
                 </label>
+                <label>
+                  Fascia oraria
+                  <input type="text" [(ngModel)]="draftTimeSlot" name="timeSlot-{{ exchange.id }}" maxlength="255" placeholder="Es. 18:00 - 19:00" />
+                </label>
                 <div class="logistics-actions">
                   <button type="button" (click)="saveLogistics(exchange)" [disabled]="actingId() === exchange.id">
                     Salva
@@ -78,22 +83,22 @@
               </div>
             } @else {
               <button type="button" class="logistics-toggle" (click)="startEditLogistics(exchange)">
-                {{ exchange.location || exchange.method ? 'Modifica luogo/metodo' : 'Aggiungi luogo e metodo di scambio' }}
+                {{ exchange.location || exchange.method || exchange.timeSlot ? 'Modifica luogo/orario/metodo' : 'Aggiungi luogo, orario e metodo di scambio' }}
               </button>
             }
 
             @if (logisticsSet(exchange)) {
               @if (myLogisticsConfirmed(exchange) && counterpartLogisticsConfirmed(exchange)) {
-                <p class="logistics-confirmed">✓ Luogo e metodo confermati da entrambi.</p>
+                <p class="logistics-confirmed">✓ Luogo, orario e metodo confermati da entrambi.</p>
               } @else if (myLogisticsConfirmed(exchange)) {
-                <p class="logistics-pending">Hai confermato luogo e metodo, in attesa dell'altra parte.</p>
+                <p class="logistics-pending">Hai confermato luogo, orario e metodo, in attesa dell'altra parte.</p>
               } @else {
                 <div class="logistics-confirm-row">
                   <p class="logistics-pending">
-                    {{ counterpartLogisticsConfirmed(exchange) ? "L'altra parte ha confermato: confermi anche tu?" : 'Confermi il luogo e il metodo di scambio proposti?' }}
+                    {{ counterpartLogisticsConfirmed(exchange) ? "L'altra parte ha confermato: confermi anche tu?" : 'Confermi il luogo, l\'orario e il metodo di scambio proposti?' }}
                   </p>
                   <button type="button" class="logistics-confirm-btn" (click)="confirmLogistics(exchange)" [disabled]="actingId() === exchange.id">
-                    Conferma luogo e metodo
+                    Conferma luogo, orario e metodo
                   </button>
                 </div>
               }
@@ -107,7 +112,7 @@
                   type="button"
                   (click)="confirm(exchange)"
                   [disabled]="actingId() === exchange.id || !canConfirmDelivery(exchange)"
-                  [title]="canConfirmDelivery(exchange) ? '' : 'Prima entrambe le parti devono confermare luogo e metodo di scambio'"
+                  [title]="canConfirmDelivery(exchange) ? '' : 'Prima entrambe le parti devono confermare luogo, orario e metodo di scambio'"
                 >
                   Conferma scambio
                 </button>
@@ -122,7 +127,7 @@
               </button>
             </div>
             @if (!hasConfirmed(exchange) && !canConfirmDelivery(exchange)) {
-              <p class="hint delivery-blocked-hint">Prima entrambe le parti devono confermare luogo e metodo di scambio.</p>
+              <p class="hint delivery-blocked-hint">Prima entrambe le parti devono confermare luogo, orario e metodo di scambio.</p>
             }
           }
 

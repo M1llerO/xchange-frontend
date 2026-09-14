@@ -73,7 +73,7 @@
 
         @if (offerSuccess()) {
           <p class="success">
-            Offerta inviata! La trovi tra i tuoi <a routerLink="/offers">scambi</a>
+            Offerta inviata! La trovi tra i tuoi <a routerLink="/offers">scambi</a> dopo essere stata accettata
             @if (createdOfferId() !== null) {
               oppure <a [routerLink]="['/messages', createdOfferId()]">apri la conversazione</a>.
             }
